@@ -1,0 +1,204 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root{
+    --main-color: #876842;
+    --black: #022135;
+    --bg: #D3D3D3;
+    --border: .1rem solid rgba(255, 255, 255, .3);
+    --light-blue: #b0bbc3f9;
+    --social-icons: .1rem solid rgba(14, 45, 67, 0.297);
+}
+
+body{
+    background: url(../../public/img/imgfundo.jpeg) no-repeat;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+}
+
+.container{
+    width: 420px;
+    background: transparent;
+    border: 3px solid #a4a4a4;
+    backdrop-filter: blur(6px);
+    border-radius: 10px;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    flex-direction: column;
+    font-family:'Segoe UI', Roboto,'Helvetica Neue', sans-serif;
+    height: 500px;
+    margin: 70px;
+}
+
+
+.forms-container{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
+
+h3{
+    font-size: 26px;
+    text-align: center;
+    color: var(--black);
+}
+
+.containers-inputs{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    height: 50%;
+}
+
+
+.input-container{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin: 20px 0 20px 0;
+}
+
+
+.input-container input{
+  background: transparent;
+  background-color: var(--bg);
+  border: none;
+  outline: none;
+  border: 2px solid rgba(255, 255, 255, .2) ;
+  border-radius: 10px;
+  font-size: 16px;
+  color: #000000;
+  transition: ease-in-out 0.4s;
+  width: 250px;
+  border-radius: 5px;
+  
+}
+
+.input-container input:hover{
+     color: #c5c5c5;
+    background-color: #666666;
+}
+
+
+.senha-container input:hover{
+    color: #c5c5c5;
+    background-color: #666666;
+}
+
+.input-container input::placeholder{
+    color: #000000;
+}
+.senha-container input::placeholder{
+    color: #000000;
+}
+
+.senha-container{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100%;
+    margin: 20px 0 20px 0;
+}
+
+
+.senha-container input{
+    background: transparent;
+    background-color: var(--bg);
+    border: none;
+    outline: none;
+    border: 2px solid rgba(255, 255, 255, .2) ;
+    border-radius: 10px;
+    font-size: 16px;
+    color: #000000;
+    transition: ease-in-out 0.4s;
+    width: 250px;
+    border-radius: 5px;
+}
+
+
+
+#email{
+    padding: 7px;
+    width: 250px;
+    border-radius: 5px;
+    margin: 5px;
+}
+
+#senha{
+    padding: 7px;
+    width: 250px;
+    border-radius: 5px;
+    margin: 5px;
+}
+
+.containers-inputs i{
+    font-size: 22px;
+    padding: 0 5px 0 0;
+    color: var(--main-color);
+}
+
+
+.container a{
+    font-size: 18px;
+    margin-top: 5px;
+    color: var(--black);
+    text-decoration: none;
+    font-weight: bold;
+}
+.container a:hover{
+    text-decoration: underline;
+}
+
+
+
+.submit-button{
+    width: 250px;
+    height: 40px;
+    bottom: 20px;
+    color: #211c1c;
+    background-color: var(--main-color);
+    border: none;
+    border-radius: 9px;
+    font-weight: 700;
+    margin-top: 24px;
+    cursor: pointer;
+    outline: none;
+    font-size: 16px;
+}
+
+.submit-button:hover{
+    background-color: #ba792b;
+    color: #fff;
+    transition: ease-in-out 0.4s;
+}
+
+.register-link{
+    text-align: center;
+    margin: 20px 0;
+}
+
+.register-link p{
+    font-size: 20px;
+    color: var(--black);
+    font-weight: bold;
+}
+.register-link p a{
+    font-size: 20px;
+    color: var(--main-color);
+    font-weight: bold;
+}
+.register-link p a:hover{
+    text-decoration: underline;
+    color: #ba792b;
+}

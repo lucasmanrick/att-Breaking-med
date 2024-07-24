@@ -1,0 +1,332 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+  
+    background-size: cover;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+
+}
+
+.container{
+    width: 900px;
+    border: 2px solid  #022135;
+    border-radius: 8px;
+    /* padding: 242px; */
+    background-position: center;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    height: 500px;
+    backdrop-filter: blur(9px);
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    
+    
+    
+}
+
+.div-titles{
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+}
+
+
+
+h3{
+    width: 250px;
+    height: 30px;
+    align-items: center;
+    font-size: 15px;
+    justify-content: center;
+    display: flex;
+    background-color: #022135;
+    border-radius: 5px;
+    padding: 8px;
+    bottom: 170px;
+    color: white;
+    margin-top: 50px;
+}
+
+
+#labelNome {
+    display: block;
+    font-weight: bold;
+    padding-bottom: -200px;
+}
+
+
+
+.formstotal{
+    display: flex;
+    height: 70%;
+    
+}
+
+.forms{
+    display: flex;
+    flex-direction: column;
+    padding-inline-end: 190px;
+    padding-top: 18px;
+    height: 100%;
+    height: 47px;
+    gap: 60px;
+}
+
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+
+}
+
+.form-control{
+    width: 280px;
+    height: 47px;
+    font-size: 11px;
+    color: #000000;
+    
+    background-color: #2a4b62  ;
+    border: none;
+    outline: none;
+   
+    color: #D3D3D3;
+    padding: 20px;
+    transition: ease-in-out 0.4s;
+    border: 2px solid #000000; /* Borda sutil */
+    border-radius: 7px; /* Bordas arredondadas */
+
+    justify-content: center;
+    /* width: 200px; /* Largura fixa para uniformidade */
+    padding: 10px; /* Espaçamento interno para conforto visual */
+    color: #ffffff; /* Cor do texto */
+    font-size: 14px; /* Tamanho do texto */
+    appearance: none; /* Remove a seta padrão do navegador */
+    -webkit-appearance: none; /* Remove a seta padrão do navegador no Webkit */
+    -moz-appearance: none; /* Remove a seta padrão do navegador no Mozilla */
+      
+}
+.form-control::placeholder{
+    color: #000000;
+}
+.form-control:hover{
+    cursor: pointer;
+}
+
+
+
+
+.input-container{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding-inline-start: 12px;
+    margin-top: 18px;
+    gap: 60px;
+    
+    width: 280px;
+    height: 47px;
+}
+
+
+ .input-container input{
+    
+    width: 280px;
+    height: 45px;
+    font-size: 11px;
+    color: #000000;
+    background-color: #2a4b62  ;
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    color: #D3D3D3;
+   Bottom: 100px;
+    transition: ease-in-out 0.4s;
+    border: 2px solid #000000; /* Borda sutil */
+    border-radius: 7px; /* Bordas arredondadas */
+
+
+
+    justify-content: center;
+    /* width: 200px; /* Largura fixa para uniformidade */
+    padding: 10px; /* Espaçamento interno para conforto visual */
+    color: #ffffff; /* Cor do texto */
+    font-size: 14px; /* Tamanho do texto */
+    appearance: none; /* Remove a seta padrão do navegador */
+    -webkit-appearance: none; /* Remove a seta padrão do navegador no Webkit */
+    -moz-appearance: none; /* Remove a seta padrão do navegador no Mozilla */
+      
+
+ 
+ 
+} 
+.input-container input::placeholder{
+    color: #D3D3D3;
+}
+
+
+
+#CPF{
+    color: #000000;
+    background-color: #2a4b62  ;
+    padding: 12px;
+    border-radius: 10px;
+}
+
+
+
+
+
+
+
+
+
+
+#CPF::placeholder{
+    color: #ffffff;
+    text-align: start;
+    
+}
+
+#Hora::placeholder{
+    color: #ffffff;
+
+}
+#Data::placeholder{
+    color: #ffffff;
+
+}
+
+#Hora{
+    justify-content: center;
+    display: flex;
+    left: 250px;
+    width: 280px;
+    height: 47px;
+    color: #000000;
+    
+    background-color: #2a4b62  ;
+    border: none;
+    outline: none;
+   
+    color: #D3D3D3;
+    padding: 20px;
+    transition: ease-in-out 0.4s;
+    border: 2px solid #000000; /* Borda sutil */
+    border-radius: 7px; /* Bordas arredondadas */
+
+    justify-content: center;
+}
+    
+#Hora{
+    justify-content: center;
+    display: flex;
+    left: 250px;
+    width: 280px;
+    height: 47px;
+    color: #000000;
+    
+    background-color: #2a4b62  ;
+    border: none;
+    outline: none;
+   
+    color: #D3D3D3;
+    padding: 20px;
+    transition: ease-in-out 0.4s;
+    border: 2px solid #000000; /* Borda sutil */
+    border-radius: 7px; /* Bordas arredondadas */
+
+    justify-content: center;
+}
+    
+
+
+
+#Especialidade.form-control{
+    left: 4px;
+}
+
+
+
+.btn{
+    display: flex;
+    justify-content: center;
+    bottom: 10px;
+    width: 100%;
+    margin-left: 15px;
+    top: 100px;
+}
+
+
+
+#Agendar{
+    background-color: #876842   ;
+    border: none;
+    outline: none;
+    border-radius: 7px;
+    color: #D3D3D3;
+    padding: 10px;
+    transition: ease-in-out 0.6s;
+    text-align: center;
+    justify-content: center;
+    display: flex;
+    top: 450px;
+    left: 390px;
+    width: 120px;
+    cursor: pointer;
+    margin: 10px;
+
+}
+#Agendar:hover{
+    cursor: pointer;
+    background-color: #41301c;
+}
+
+
+#Voltar{
+    background-color: #876842   ;
+    border: none;
+    outline: none;
+    border-radius: 7px;
+    color: #D3D3D3;
+    padding: 10px;
+    transition: ease-in-out 0.6s;
+    text-align: center;
+    justify-content: center;
+    display: flex;
+    top: 530px;
+    left: 30px;
+    width: 120px;
+    cursor: pointer;
+    margin: 10px;
+
+}
+#Voltar:hover{
+    cursor: pointer;
+    background-color: #41301c;
+}
+
+
+
+
+
+
+
+
+
+/* 
+#876842   Bottao
+#2a4b62  
+#022135  Letras
+#D3D3D3  Fundo
+*/

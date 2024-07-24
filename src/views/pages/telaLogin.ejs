@@ -1,0 +1,74 @@
+<link rel="stylesheet" href="/css/telaLogin.css">
+
+<div class="container">
+  <form id="sendForm" class="forms-container" method="post" action="">
+
+    <h3>Seja Bem-vindo!</h3>
+
+    <div class="containers-inputs">
+      <div class="input-container">
+        <input name="login" placeholder="CPF" type="text" required id="login">
+        <i class="fas fa-user"></i>
+      </div>
+
+      <div class="senha-container">
+        <input name="senha" placeholder="Senha" type="password" required id="senha">
+        <i class="fas fa-key"></i>
+      </div>
+
+      <a href="#" id="esqueciminhasenha">Esqueci minha senha</a>
+    </div>
+
+
+    <input id="submitButton" type="submit" class="submit-button" title="Enviar"></input>
+
+    <div class="register-link">
+      <p>Não está cadastrado ? <a href="#">Cadastre-se</a> </p>
+    </div>
+
+  </form>
+</div>
+
+
+<script defer>
+  let userData;
+
+  document.getElementById('sendForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+  })
+
+  document.getElementById('submitButton').addEventListener('click', async (e) => {
+    console.log('clicou')
+    const login = document.getElementById('login').value
+    const senha = document.getElementById('senha').value
+
+    fetch('/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        login: login,
+        senha: senha
+      })
+    })
+      .then(response => response.json())
+      .then(data => {
+        if(sessionStorage.getItem("userData")) {
+          sessionStorage.setItem('userData','')
+        }
+        if (data.result === false) {
+          alert(data.loginMessage)
+          return
+        }
+        sessionStorage.setItem("userData",JSON.stringify(data));
+        console.log('data user', sessionStorage.getItem('userData'))
+        window.location = data.redirect;
+      })
+    .catch (error => {
+      // Lidar com o erro
+      console.error('Erro:', error);
+    });
+})
+
+</script>

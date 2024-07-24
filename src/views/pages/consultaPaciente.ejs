@@ -1,0 +1,112 @@
+<link rel="stylesheet" href="css/consultaPaciente.css">
+<!-- Seção da tabela de dados -->
+<section class="dados" id="dados">
+  <h1 class="heading"> <span>Tabela de Dados</span> </h1>
+  <table>
+    <thead>
+      <tr>
+        <th>ID da Consulta</th>
+        <th>Data</th>
+        <th>Hora</th>
+        <th>Nome do Médico</th>
+        <th>Especialidade</th>
+      </tr>
+    </thead>
+    <tbody id="corpo-tabela-dados">
+      <!-- Os dados serão inseridos aqui pelo JavaScript -->
+
+    </tbody>
+  </table>
+</section>
+<!-- Fim da seção da tabela de dados -->
+
+<!-- Inicio da função de enviar informações do formulario CHATGBT que deu a fução não sei se vai funcionar -->
+
+
+
+<script>
+  const dataUser = JSON.parse(sessionStorage.getItem('userData'))
+  const token = dataUser.token
+
+  const pacienteId = dataUser.moreInfos.pessId
+
+
+  fetch('/ConsultasPaciente', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      authorization: token,
+      idpessoa: pacienteId
+    }
+  })
+    .then(response => response.json())
+    .then(data => {
+      if (data.result === false) {
+        alert("não foi possivel retornar as especializações disponiveis para registro erro:", data.cadastroMessage)
+        return
+      } else if (data.auth === false) {
+        alert('usuario deslogado, logue novamente para continuar')
+        window.location = '/login'
+      }
+
+      const tableReceiver = document.getElementById('corpo-tabela-dados')
+
+
+      data.moreInfos.forEach(e => {
+        const linha = document.createElement('tr')
+        const colunaId = document.createElement('td')
+        colunaId.innerText = `${e.idConsulta}`
+        const colunaDataConsulta = document.createElement('td')
+        colunaDataConsulta.innerText = `${e.dataConsulta}`
+        const colunaHoraConsulta = document.createElement('td')
+        colunaHoraConsulta.innerText = `${e.horaConsulta}`
+        const colunaMedicoNome = document.createElement('td')
+        colunaMedicoNome.innerText = `${e.dadosMedico.nomeDoMedico}`
+        const colunaEspecialidade = document.createElement('td')
+        colunaEspecialidade.innerText = `${e.dadosMedico.consultaEspecialidade}`
+
+
+
+        linha.append(colunaId, colunaDataConsulta, colunaHoraConsulta, colunaMedicoNome, colunaEspecialidade)
+        tableReceiver.appendChild(linha)
+
+      })
+
+    })
+    .catch(error => {
+      console.log('erro')
+      console.error('Erro:', error);
+    });
+
+
+</script>
+
+
+<!-- <script>
+    $(document).ready(function () {
+        // Faz uma solicitação AJAX para obter os dados do servidor
+        $.ajax({
+            url: 'seu_servidor_dados.php', // Substitua pelo URL do seu servidor e endpoint para obter os dados
+            method: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                // Limpa o conteúdo atual da tabela
+                $('#corpo-tabela-dados').empty();
+                // Itera sobre os dados recebidos e os insere na tabela
+                $.each(data, function (index, item) {
+                    var row = $('<tr>');
+                    row.append($('<td>').text(item.data));
+                    row.append($('<td>').text(item.hora));
+                    row.append($('<td>').text(item.status));
+                    row.append($('<td>').text(item.nomeMedico));
+                    row.append($('<td>').text(item.nomePaciente));
+                    row.append($('<td>').text(item.especialidade));
+                    $('#corpo-tabela-dados').append(row);
+                });
+            },
+            error: function () {
+                console.log('Erro ao obter os dados do servidor.');
+            }
+        });
+    });
+</script> -->

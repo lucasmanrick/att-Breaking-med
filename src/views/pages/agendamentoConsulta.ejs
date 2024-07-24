@@ -1,0 +1,211 @@
+<link rel="stylesheet" href="css/agendamentoConsulta.css">
+
+<div class="container">
+  <div class="div-titles">
+    <h3>Agendamento de Consulta</h3>
+  </div>
+  <h5 id="Nomeh5">Nome do Médico:</h5>
+  <h5 id="Especialidadeh5">Especialidade do Médico:</h5>
+  <h5 id="Horarioh5">Horário da consulta:</h5>
+  <h5 id="Datah5">Data da consulta:</h5>
+
+  <div class="formstotal">
+
+    <form class="forms" id="form" action="">
+      <input placeholder="CPF do cliente" type="text" required name="CPF" id="CPF">
+      <select class="form-control" name="Nome" id="Nome">
+      </select>
+      <select class="form-control Especialidade" name="Especialidade" id="Especialidade">
+      </select>
+    </form>
+
+    <div class="input-container">
+
+      <div id="divHora">
+        <label for="Horinha" id="Horinha">Hora da consulta:</label>
+        <input placeholder="Hora" name="hora" type="text" required id="Hora">
+      </div>
+
+      <div id="Datinha">
+        <label for="Datinha">Data da consulta:</label>
+        <input placeholder="Data" name="Datinha" lang="text" required id="Data">
+      </div>
+    </div>
+
+  </div>
+
+
+
+
+  <div class="btn">
+    <button type="button" id="Agendar">Agendar</button>
+    <button type="button" id="Voltar">Voltar</button>
+  </div>
+
+
+</div>
+
+<script>
+  const dataUser = JSON.parse(sessionStorage.getItem('userData'))
+  const token = dataUser.token
+
+  fetch('/DadosParaRegistroConsulta', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      authorization: token
+    }
+  })
+    .then(response => response.json())
+    .then(data => {
+      if (data.result === false) {
+        alert("não foi possivel retornar as especializações disponiveis para registro erro:", data.cadastroMessage)
+        return
+      } else if (data.auth === false) {
+        alert('usuario deslogado, logue novamente para continuar')
+        window.location = '/login'
+      }
+      localStorage.setItem('especialidadesToConsulta', '')
+      sessionStorage.setItem("especialidadesToConsulta", JSON.stringify(data));
+
+      const selectEspecialidade = document.getElementById('Especialidade')
+
+      const receiveEspecialities = JSON.parse(sessionStorage.getItem("especialidadesToConsulta"))
+
+      const receiveAllOptions = document.getElementsByTagName('Option')
+      console.log(receiveAllOptions.length)
+
+
+      receiveEspecialities.moreInfos.forEach(e => {
+        let verificaNecessidade = true;
+        for (let i = 0; i < receiveAllOptions.length; i++) {
+          console.log(receiveAllOptions[i].attributes.value.value)
+          if (e.especialidade_id == receiveAllOptions[i].attributes.value.value) {
+            console.log(`ja tem ${e.desc_especialidade} inserido no select`)
+            verificaNecessidade = false
+            return
+          }
+        }
+        if (verificaNecessidade === true) {
+          const createNewOption = document.createElement('option')
+          createNewOption.value = `${e.especialidade_id}`;
+          createNewOption.innerText = `${e.desc_especialidade}`
+          selectEspecialidade.appendChild(createNewOption)
+        }
+
+      })
+
+      selectEspecialidade.addEventListener('change', (ev) => {
+        const seletor = document.getElementsByClassName('Especialidade')[0]
+        const valorSelecionado = seletor.value
+
+
+        fetch('/MedicoComEspecialidadeEspecifica', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            authorization: token,
+            idEspecialidade: valorSelecionado
+          }
+        }).then(response => response.json())
+          .then(data => {
+            if (data.result === false) {
+              alert("não foi possivel retornar as especializações disponiveis para registro erro:", data.cadastroMessage)
+              return
+            } else if (data.auth === false) {
+              alert('usuario deslogado, logue novamente para continuar')
+              window.location = '/login'
+            }
+
+            if (data.result === true) {
+              localStorage.setItem('medicInfo', '')
+              localStorage.setItem('medicInfo', JSON.stringify(data))
+
+              const selectNames = document.getElementById("Nome")
+              selectNames.innerHTML = ''
+              const allOptionsAttVerify = document.getElementsByTagName('Option')
+
+              data.moreInfos.forEach(dataWorker => {
+                let secondVerifyNecessity = true
+                for (let i = 0; i < allOptionsAttVerify.length; i++) {
+                  if (dataWorker.funcionario_id == allOptionsAttVerify[i].attributes.value.value) {
+                    console.log(`o usuario ${dataWorker.nome} ja está inserido no select name`)
+                    secondVerifyNecessity = false
+                    return
+                  }
+                }
+
+                if (secondVerifyNecessity === true) {
+                  const createNewOption = document.createElement('option')
+                  createNewOption.value = `${dataWorker.funcionario_id}`;
+                  // createNewOption.value = `${dataWorker.funcionario_pessoa_id}`;
+                  createNewOption.innerText = `${dataWorker.nome}`
+                  selectNames.appendChild(createNewOption)
+                }
+              })
+            }
+
+          })
+
+      });
+
+
+      // receiveEspecialities.moreInfos.forEach()
+    })
+    .catch(error => {
+      console.error('Erro:', error);
+    });
+
+  document.getElementById('form').addEventListener("submit", (e) => {
+    e.preventDefault();
+  })
+
+
+  document.getElementById('Agendar').addEventListener('click', async e => {
+    const selectNames = document.getElementById("Nome")
+
+    const allOptionsAttVerify = document.getElementsByTagName('Option')
+
+
+    const seletor = document.getElementsByClassName('Especialidade')[0]
+    const especialidade_id = parseInt(seletor.value)
+
+
+    const cpfPaciente = document.getElementById('CPF').value
+    const data = document.getElementById('Data').value
+    const hora = document.getElementById('Hora').value
+
+    let armazenaIdPessFuncionarioId = localStorage.getItem('medicInfo')
+    console.log(armazenaIdPessFuncionarioId)
+    armazenaIdPessFuncionarioId = JSON.parse(armazenaIdPessFuncionarioId)
+    console.log('teste2', armazenaIdPessFuncionarioId)
+    const funcionario_id = armazenaIdPessFuncionarioId.moreInfos[0].funcionario_id
+
+    armazenaIdPessFuncionarioId = armazenaIdPessFuncionarioId.moreInfos[0].funcionario_pessoa_id
+    console.log('teste3', armazenaIdPessFuncionarioId)
+
+
+
+    fetch('/NovaConsulta', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: token
+      },
+      body: JSON.stringify({
+        data: data,
+        hora: hora,
+        status: status,
+        cpfPaciente: cpfPaciente,
+        funcionario_id: funcionario_id,
+        funcionario_pessoa_id: armazenaIdPessFuncionarioId,
+        especialidade_id: especialidade_id
+      })
+    }).then(response => response.json())
+      .then(data => {
+        alert(data.consultaMessage)
+      }).catch(e => {
+        console.log(e)
+      })
+  })
+</script>

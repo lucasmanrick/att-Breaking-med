@@ -1,0 +1,119 @@
+<link rel="stylesheet" href="css/consultaMedico.css">
+<!-- Seção da tabela de dados -->
+<section class="dados" id="dados">
+    <h1 class="heading"> <span>Tabela de Dados</span> </h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Consulta ID</th>
+                <th>Nome do Paciente</th>
+                <th>CPF</th>
+                <th>Data da Consulta</th>
+                <th>Horario da Consulta</th>
+                <!-- <th>Ações</th> -->
+            </tr>
+        </thead>
+        <tbody id="corpo-tabela-dados">
+            <!-- Os dados serão inseridos aqui pelo JavaScript -->
+            <!-- <td><button class="fas fa-book-medical btn-prontuario" onclick="abrirProntuario(1)"></button></td> -->
+        </tbody>
+    </table>
+</section>
+<!-- Fim da seção da tabela de dados -->
+
+Seção do prontuário
+<div id="prontuarioModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="fecharProntuario()">&times;</span>
+        <h2>Prontuário</h2>
+        <div id="prontuarioContent">
+            <!-- Conteúdo do prontuário será adicionado aqui -->
+        </div>
+    </div>
+</div>
+<!-- Fim da seção do prontuário -->
+<script>
+
+    const dataUser = JSON.parse(sessionStorage.getItem('userData'))
+    const token = dataUser.token
+
+    const funcionarioId = dataUser.moreInfos.pessId
+
+
+    fetch('/ConsultasMedico', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      authorization: token,
+      idfuncionario:funcionarioId
+    }
+  })
+    .then(response => response.json())
+    .then(data => {
+      if (data.result === false) {
+        alert("não foi possivel retornar as especializações disponiveis para registro erro:", data.cadastroMessage)
+        return
+      } else if (data.auth === false) {
+        alert('usuario deslogado, logue novamente para continuar')
+        window.location = '/login'
+      }
+
+      const tableReceiver = document.getElementById('corpo-tabela-dados')
+
+      data.moreInfos.forEach(e => {
+        const linha = document.createElement('tr')
+        const colunaId = document.createElement('td')
+        colunaId.innerText = `${e.idConsulta}`
+        const colunaPacienteNome = document.createElement('td')
+        colunaPacienteNome.innerText = `${e.dadosPaciente.nomePaciente}`
+        const colunaCpf = document.createElement('td')
+        colunaCpf.innerText = `${e.dadosPaciente.cpfPaciente}`
+        const colunaDataConsulta = document.createElement('td')
+        colunaDataConsulta.innerText = `${e.dataConsulta}`
+        const colunaHoraConsulta = document.createElement('td')
+        colunaHoraConsulta.innerText = `${e.horaConsulta}`
+  
+
+        linha.append(colunaId, colunaPacienteNome, colunaCpf,colunaDataConsulta ,colunaHoraConsulta)
+        tableReceiver.appendChild(linha)
+
+      })
+
+    })
+    .catch(error => {
+      console.log('erro')
+      console.error('Erro:', error);
+    });
+
+
+</script>
+
+<!-- Inicio da função de enviar informações do formulario -->
+<!-- 
+function abrirProntuario(consultaId) {
+  // falta criar lógica para carregar os dados do prontuário com base no ID da consulta
+  var prontuarioContent = document.getElementById("prontuarioContent");
+  prontuarioContent.innerHTML = "<p>Conteúdo do prontuário para a consulta ID " + consultaId + "</p>";
+
+  // Exibe o modal do prontuário
+  var prontuarioModal = document.getElementById("prontuarioModal");
+  prontuarioModal.style.display = "block";
+}
+
+// Função para fechar o prontuário
+function fecharProntuario() {
+  // Oculta o modal do prontuário
+  var prontuarioModal = document.getElementById("prontuarioModal");
+  prontuarioModal.style.display = "none";
+} -->
+<!-- Fim da função de enviar informações do formulario -->
+
+
+<!-- Seção do rodapé -->
+<section class="footer">
+    <div class="credit">Criado por <span>Breaking Medical Clinic.</span> | 2024 Todos os direitos reservados</div>
+</section>
+<!-- Fim da seção do rodapé -->
+
+<!-- Link para o arquivo de JavaScript personalizado -->
+<script src="../js/visualizaConsultaMedico.js"></script>

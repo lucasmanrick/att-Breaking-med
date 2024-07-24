@@ -1,0 +1,80 @@
+<link rel="stylesheet" href="../../../public/css/header.css">
+
+<header class="header" id="header">
+
+  <a href="#" class="logo" id="logo-name-container" style="display: flex; width: 20%; justify-content: space-evenly;">
+    <img src="../../../public/img/imgLogo1.jpg" alt="logo">
+  </a>
+
+  <nav class="navbar" id="headerNavBar">
+
+  </nav>
+
+  <div class="icons">
+    <div class="fas fa-sign-out-alt" id="search-btn"></div>
+  </div>
+
+
+
+</header>
+
+<script>
+
+  if (sessionStorage.getItem('userData') !== null) {
+  
+    const dataUser = JSON.parse(sessionStorage.getItem('userData'))
+    const navbar = document.getElementById('headerNavBar')
+    if (dataUser.moreInfos.tipo === 'administrador') {
+
+      const newUserBtn = document.createElement('a')
+      newUserBtn.setAttribute('id', 'registerUser')
+      newUserBtn.innerText = `Registrar novo Usuário`
+      newUserBtn.href = '/RegisterPage'
+
+
+      const newConsultaBtn = document.createElement('a')
+      newConsultaBtn.setAttribute('id', 'consultasBtn')
+      newConsultaBtn.innerText = `Agendamento de consulta`
+      newConsultaBtn.href = '/NovaConsulta'
+
+
+      const manipulaConsultas = document.createElement('a')
+      manipulaConsultas.setAttribute('id', 'QueryManipulate')
+      manipulaConsultas.innerText = `Manipulação de consultas`
+      manipulaConsultas.href = '/CancelaConsultaPage'
+      navbar.append(newUserBtn, newConsultaBtn, manipulaConsultas)
+
+    }
+
+    else if (dataUser.moreInfos.tipo === 'paciente') {
+      const newUserBtn = document.createElement('a')
+      newUserBtn.setAttribute('id', 'registerUser')
+      newUserBtn.innerText = `Minhas Consultas`
+      newUserBtn.href = '/ConsultaPacientePage'
+
+
+      navbar.append(newUserBtn)
+
+    } else if (dataUser.moreInfos.tipo === 'medico') {
+      const newUserBtn = document.createElement('a')
+      newUserBtn.setAttribute('id', 'registerUser')
+      newUserBtn.innerText = `Verificar minhas Consultas`
+      newUserBtn.href = '/ConsultaMedicoPage'
+
+      navbar.append(newUserBtn)
+    }
+
+
+    if(dataUser.moreInfos.tipo === 'medico' || dataUser.moreInfos.tipo === 'paciente' || dataUser.moreInfos.tipo === 'administrador') {
+      document.getElementById('logo-name-container').innerHTML = `${dataUser.moreInfo.nomeUsuario}`
+    }
+
+  } else {
+    const navbar = document.getElementById('headerNavBar')
+    navbar.innerHTML = ''
+    navbar.innerHTML = `<a href="/home">Início</a>
+    <a href="/sobre">Sobre nós</a>
+    <a href="/especialidades">Especialidades</a>
+    <a href="/login" id="telaLogin">Login</a>`
+  }
+</script>

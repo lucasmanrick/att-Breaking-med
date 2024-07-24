@@ -1,0 +1,167 @@
+<link rel="stylesheet" href="/css/cadastroPessoa.css">
+<!-- Formulário de cadastro -->
+<form id="cadastro">
+  <h1 id="cadastroPessoa">CADASTRO DE PESSOA</h1>
+  <input type="text" name="nome" id="nome" placeholder="Nome">
+  <input type="text" name="cpf" id="cpf" placeholder="Cpf">
+  <select name="genero" id="genero">
+    <option value="masculino">Masculino</option>
+    <option value="feminino">Feminino</option>
+    <option value="outro">Outro</option>
+  </select>
+  <input type="date" name="dataNasc" id="dataNasc">
+  <input type="email" name="email" id="email" placeholder="Email">
+  <input type="text" name="logradouro" id="logradouro" placeholder="Logradouro">
+  <input type="text" name="bairro" id="bairro" placeholder="Bairro">
+  <input type="text" name="estado" id="estado" placeholder="Estado">
+  <input type="text" name="numero" id="numero" placeholder="Numero">
+  <input type="text" name="complemento" id="complemento" placeholder="Complemento">
+  <input type="text" name="cep" id="cep" placeholder="Cep">
+  <input type="number" name="telefones" id="telefones" placeholder="Telefones">
+  <select name="personPerfil" id="personPerfil">
+    <option value="medico">Medico</option>
+    <option value="administrador">Administrador</option>
+    <option value="paciente">Paciente</option>
+  </select>
+  <input type="date" name="dataAdmissao" id="dataAdmissao" placeholder="Data Admissao">
+  <input type="number" name="crm" id="crm" placeholder="Crm">
+  <select name="especialidadeParaRegistro" id="especialidadeParaRegistro">
+
+  </select>
+
+  <button type="submit">Enviar</button>
+</form>
+<!-- Fim do formulário de cadastro -->
+
+<script defer>
+
+
+
+  const dataUser = JSON.parse(sessionStorage.getItem('userData'))
+  const token = dataUser.token
+
+
+  fetch('/RegistroUsuario', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      authorization: token
+    }
+  })
+    .then(response => response.json())
+    .then(data => {
+      if (data.result === false) {
+        alert("não foi possivel retornar as especializações disponiveis para registro erro:", data.cadastroMessage)
+        return
+      } else if (data.auth === false) {
+        alert('usuario deslogado, logue novamente para continuar')
+        window.location = '/login'
+      }
+      if (sessionStorage.getItem("especialidadesToRegister")) {
+        sessionStorage.setItem('especialidadesToRegister', '')
+      }
+
+      sessionStorage.setItem("especialidadesToRegister", JSON.stringify(data));
+
+      const especialidadeExiste = sessionStorage.getItem('especialidadesToRegister')
+      if (!especialidadeExiste) {
+        const dataAdmissaoBtn = document.getElementById('dataAdmissao')
+        const crmBtn = document.getElementById('crm')
+
+
+        document.getElementById('cadastro').removeChild(dataAdmissaoBtn)
+        document.getElementById('cadastro').removeChild(crmBtn)
+      } else {
+        const especialidadeParaRegistro = document.getElementById('especialidadeParaRegistro')
+
+        let htmlInsert = ``
+
+        const parseEspec = JSON.parse(especialidadeExiste)
+
+        if (parseEspec.moreInfos !== undefined) {
+          parseEspec.moreInfos.forEach(e => {
+            const optionToChoose = document.createElement('option')
+            optionToChoose.value = `${e.id}`
+            optionToChoose.innerText = `${e.desc_especialidade}`
+            especialidadeParaRegistro.appendChild(optionToChoose)
+          })
+        }
+      }
+
+
+
+    })
+    .catch(error => {
+      console.error('Erro:', error);
+    });
+
+
+
+  document.getElementById('cadastro').addEventListener('submit', (e) => {
+    e.preventDefault()
+    const nome = document.getElementById('nome').value
+    const cpf = document.getElementById('cpf').value
+    const genero = document.getElementById('genero').value
+    const dataNasc = document.getElementById('dataNasc').value
+    const email = document.getElementById('email').value
+    const logradouro = document.getElementById('logradouro').value
+    const bairro = document.getElementById('bairro').value
+    const estado = document.getElementById('estado').value
+    const numero = document.getElementById('numero').value
+    const complemento = document.getElementById('complemento').value
+    const cep = document.getElementById('cep').value
+    const telefones = document.getElementById('telefones').value
+    const personPerfil = document.getElementById('personPerfil').value
+    const dataAdmissao = document.getElementById('dataAdmissao').value
+    const crm = document.getElementById('crm').value
+    const idEspec = document.getElementById('especialidadeParaRegistro').value
+
+
+
+
+    fetch('/RegistroUsuario', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: token
+      },
+      body: JSON.stringify({
+        nome: nome,
+        cpf: cpf,
+        genero: genero,
+        dataNasc: dataNasc,
+        email: email,
+        logradouro: logradouro,
+        bairro: bairro,
+        estado: estado,
+        numero: numero,
+        complemento: complemento,
+        cep: cep,
+        telefones: [telefones],
+        personPerfil: personPerfil,
+        dataAdmissao: dataAdmissao,
+        crm: crm,
+        idEspec: idEspec
+      })
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.result === false) {
+          alert("algo deu errado durante o registro do usuario, por favor tente novamente!", data.result)
+          return
+        } else if (data.auth === false) {
+          alert('usuario deslogado, logue novamente para continuar')
+          window.location = '/login'
+          
+        }
+        alert('usuario registrado com sucesso')
+      })
+      .catch(error => {
+        // Lidar com o erro
+        console.error('Erro:', error);
+      });
+
+  })
+
+
+</script>
