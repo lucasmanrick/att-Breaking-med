@@ -38,7 +38,7 @@
 <script defer>
 
   function cancelaConsulta(idConsulta) {
-    alert('clicou em cancelar')
+
     fetch('/Consulta', {
       method: 'PUT',
       headers: {
@@ -50,13 +50,15 @@
       .then(response => response.json())
       .then(data => {
         if (data.result === false) {
-          alert("não foi possivel retornar as especializações disponiveis para registro erro:", data.cadastroMessage)
+          alert("não foi possivel obter ou não possuem consultas pendentes mensagem: ", data.cadastroMessage)
           return
         } else if (data.auth === false) {
           alert('usuario deslogado, logue novamente para continuar')
           window.location = '/login'
         }
         alert(data.consultaMessage)
+
+        window.location="/CancelaConsultaPage"
       })
       .catch(error => {
         // Lidar com o erro

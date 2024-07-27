@@ -29,7 +29,7 @@
 
       <div id="Datinha">
         <label for="Datinha">Data da consulta:</label>
-        <input placeholder="Data" name="Datinha" lang="text" required id="Data">
+        <input type="Date" name="Datinha" lang="text" required id="Data">
       </div>
     </div>
 
@@ -74,15 +74,12 @@
       const receiveEspecialities = JSON.parse(sessionStorage.getItem("especialidadesToConsulta"))
 
       const receiveAllOptions = document.getElementsByTagName('Option')
-      console.log(receiveAllOptions.length)
 
 
       receiveEspecialities.moreInfos.forEach(e => {
         let verificaNecessidade = true;
         for (let i = 0; i < receiveAllOptions.length; i++) {
-          console.log(receiveAllOptions[i].attributes.value.value)
           if (e.especialidade_id == receiveAllOptions[i].attributes.value.value) {
-            console.log(`ja tem ${e.desc_especialidade} inserido no select`)
             verificaNecessidade = false
             return
           }
@@ -130,7 +127,6 @@
                 let secondVerifyNecessity = true
                 for (let i = 0; i < allOptionsAttVerify.length; i++) {
                   if (dataWorker.funcionario_id == allOptionsAttVerify[i].attributes.value.value) {
-                    console.log(`o usuario ${dataWorker.nome} ja está inserido no select name`)
                     secondVerifyNecessity = false
                     return
                   }
@@ -177,13 +173,10 @@
     const hora = document.getElementById('Hora').value
 
     let armazenaIdPessFuncionarioId = localStorage.getItem('medicInfo')
-    console.log(armazenaIdPessFuncionarioId)
     armazenaIdPessFuncionarioId = JSON.parse(armazenaIdPessFuncionarioId)
-    console.log('teste2', armazenaIdPessFuncionarioId)
     const funcionario_id = armazenaIdPessFuncionarioId.moreInfos[0].funcionario_id
 
     armazenaIdPessFuncionarioId = armazenaIdPessFuncionarioId.moreInfos[0].funcionario_pessoa_id
-    console.log('teste3', armazenaIdPessFuncionarioId)
 
 
 
