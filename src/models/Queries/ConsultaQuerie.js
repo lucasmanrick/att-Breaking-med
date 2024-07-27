@@ -126,7 +126,7 @@ const QuerieConsulta = {
           console.log('entrou 2')
           const promessasConsultas = returnMessage.moreInfos.map(async (el) => {
             el.status = 'ativo';
-            const pegaNomeMedicoEEspecialidade = await conn.query('select p.nome as nomePaciente, p.cpf as cpfPaciente,c.data as dataConsulta,c.hora as horaConsulta, c.status as statusConsulta from tbl_pessoa as p join tbl_paciente as pac on pac.pessoa_id=p.id join tbl_consulta as c on pac.pessoa_id=c.id ');
+            const pegaNomeMedicoEEspecialidade = await conn.query('select id as idDoPaciente, nome as nomeDoPaciente, data_nasc as dataDeNascimento, email as emailDoPaciente from tbl_pessoa Where id=?', [el.paciente_pessoa_id]);
             const pegaProntuarioConsulta = await conn.query('select id as idPront,medicacao,diagnostico from tbl_prontuario where consulta_id=?',[el.idConsulta])
             el.dadosPaciente = pegaNomeMedicoEEspecialidade[0][0];
             el.dadosPaciente.funcionario_id = el.funcionario_id
@@ -142,7 +142,7 @@ const QuerieConsulta = {
             return el;
           });  
           returnMessage.moreInfos = await Promise.all(promessasConsultas);
-          console.log('entrou 3')
+          console.log(returnMessage)
           return returnMessage;
           
         }

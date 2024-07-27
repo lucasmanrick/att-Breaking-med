@@ -64,9 +64,9 @@ const consultaController = {
   },
 
   verificaConsultasMedico: async (req, res) => {
-    const idFuncionario = req.headers['idfuncionario']
-    if (idFuncionario) {
-      const recebeConsultas = new Pessoa(idFuncionario)
+    const idPessoa = req.headers['idpessoa']
+    if (idPessoa) {
+      const recebeConsultas = new Pessoa(idPessoa)
       res.json(await retornaConsultaDeMedicoLogado(recebeConsultas))
     }
   },

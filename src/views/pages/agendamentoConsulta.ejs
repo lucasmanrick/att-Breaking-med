@@ -16,6 +16,7 @@
       <select class="form-control" name="Nome" id="Nome">
       </select>
       <select class="form-control Especialidade" name="Especialidade" id="Especialidade">
+        <option value="">Selecione uma especialidade</option>
       </select>
     </form>
 
@@ -65,7 +66,7 @@
         alert('usuario deslogado, logue novamente para continuar')
         window.location = '/login'
       }
-      localStorage.setItem('especialidadesToConsulta', '')
+      sessionStorage.setItem('especialidadesToConsulta', '')
       sessionStorage.setItem("especialidadesToConsulta", JSON.stringify(data));
 
       const selectEspecialidade = document.getElementById('Especialidade')
