@@ -39,17 +39,19 @@ Seção do prontuário
 
     const funcionarioId = dataUser.moreInfos.pessId
 
-
+    console.log("requisitando consultas medico"," id do funcionario: ", funcionarioId,)
     fetch('/ConsultasMedico', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
       authorization: token,
-      idfuncionario:funcionarioId
+      idpessoa:funcionarioId
     }
   })
     .then(response => response.json())
     .then(data => {
+      console.log("resultado: ", data )
+
       if (data.result === false) {
         alert("não foi possivel retornar as especializações disponiveis para registro erro:", data.cadastroMessage)
         return
@@ -65,9 +67,9 @@ Seção do prontuário
         const colunaId = document.createElement('td')
         colunaId.innerText = `${e.idConsulta}`
         const colunaPacienteNome = document.createElement('td')
-        colunaPacienteNome.innerText = `${e.dadosPaciente.nomePaciente}`
+        colunaPacienteNome.innerText = `${e.dadosPaciente.nomeDoPaciente}`
         const colunaCpf = document.createElement('td')
-        colunaCpf.innerText = `${e.dadosPaciente.cpfPaciente}`
+        colunaCpf.innerText = `${e.dadosPaciente.cpf}`
         const colunaDataConsulta = document.createElement('td')
         colunaDataConsulta.innerText = `${e.dataConsulta}`
         const colunaHoraConsulta = document.createElement('td')

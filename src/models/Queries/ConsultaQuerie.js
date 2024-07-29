@@ -126,7 +126,7 @@ const QuerieConsulta = {
 
           const promessasConsultas = returnMessage.moreInfos.map(async (el) => {
             el.status = 'ativo';
-            const pegaNomeMedicoEEspecialidade = await conn.query('select id as idDoPaciente, nome as nomeDoPaciente, data_nasc as dataDeNascimento, email as emailDoPaciente from tbl_pessoa Where id=?', [el.paciente_pessoa_id]);
+            const pegaNomeMedicoEEspecialidade = await conn.query('select id as idDoPaciente, nome as nomeDoPaciente, data_nasc as dataDeNascimento, email as emailDoPaciente, cpf from tbl_pessoa Where id=?', [el.paciente_pessoa_id]);
             const pegaProntuarioConsulta = await conn.query('select id as idPront,medicacao,diagnostico from tbl_prontuario where consulta_id=?',[el.idConsulta])
             el.dadosPaciente = pegaNomeMedicoEEspecialidade[0][0];
             el.dadosPaciente.funcionario_id = el.funcionario_id

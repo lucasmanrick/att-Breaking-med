@@ -69,7 +69,6 @@ router.put('/Consulta',verifyJWT,consultaController.cancelaConsulta)//para cance
 
 
 //updateDeProntuario 
-
 router.put('/Prontuario', verifyJWTMedico, consultaController.preencheProntuario) //atualiza dados no prontuario
 
 
