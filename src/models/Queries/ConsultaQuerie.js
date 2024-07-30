@@ -169,7 +169,7 @@ const QuerieConsulta = {
     try{
       let returnUpdateStatment;
       if(prontObj.diagnostico !== '' && prontObj.medicacao !== '') {
-        returnUpdateStatment = await conn.query('UPDATE tbl_prontuario set diagnostico=? AND medicacao=? WHERE id=?',[prontObj.diagnostico,prontObj.medicacao,prontObj.id])
+        returnUpdateStatment = await conn.query('UPDATE tbl_prontuario set diagnostico=? , medicacao=? WHERE id=?',[prontObj.diagnostico,prontObj.medicacao,prontObj.id])
       }else if (prontObj.diagnostico !== '' && prontObj.medicacao == '') {
         returnUpdateStatment = await conn.query('UPDATE tbl_prontuario SET diagnostico=? WHERE id=?',[prontObj.diagnostico, prontObj.id])
       }else if (prontObj.diagnostico === '' && prontObj.medicacao !== '') {

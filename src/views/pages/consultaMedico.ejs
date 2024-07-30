@@ -131,8 +131,15 @@
     }
 
 
-    document.getElementById("sendAttPront").addEventListener("click", () => {
-    enviaAtualizacaoProntuario(consultaAndPront.dadosProntuario.idPront)
+    document.getElementById("sendAttPront").addEventListener("click", async() => {
+      try {
+        await enviaAtualizacaoProntuario(consultaAndPront.dadosProntuario.idPront)
+        fecharProntuario()
+      }
+      catch(e) {
+        console.log(e)
+      }
+    
   })
 
     // Exibe o modal do prontuário
@@ -166,13 +173,13 @@
     })
       .then(response => response.json())
       .then(data => {
-        if (data.result === false) {
+        if (data.result === true) {
           alert("Dados do Prontuario atualizado com sucesso.")
           return
         } else if (data.auth === false) {
           alert('usuario deslogado, logue novamente para continuar')
           window.location = '/login'
-        }
+        }   
       })
       .catch(error => {
         // Lidar com o erro
