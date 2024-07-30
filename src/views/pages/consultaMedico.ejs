@@ -1,56 +1,68 @@
 <link rel="stylesheet" href="css/consultaMedico.css">
+
 <!-- Seção da tabela de dados -->
 <section class="dados" id="dados">
-    <h1 class="heading"> <span>Tabela de Dados</span> </h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Consulta ID</th>
-                <th>Nome do Paciente</th>
-                <th>CPF</th>
-                <th>Data da Consulta</th>
-                <th>Horario da Consulta</th>
-                <!-- <th>Ações</th> -->
-            </tr>
-        </thead>
-        <tbody id="corpo-tabela-dados">
-            <!-- Os dados serão inseridos aqui pelo JavaScript -->
-            <!-- <td><button class="fas fa-book-medical btn-prontuario" onclick="abrirProntuario(1)"></button></td> -->
-        </tbody>
-    </table>
+
+  <div id="prontuarioModal" class="modal">
+    <div class="modal-content">
+      <h2>Prontuário Breaking Med</h2>
+      <span class="close" onclick="fecharProntuario()">X</span>
+    </div>
+    <div id="prontuarioContent">
+      <!-- Conteúdo do prontuário será adicionado aqui -->
+    </div>
+    <H2>Medicação</H2>
+    <textarea type="text" style="height: 100px; width: 100%; border: 1px solid;" id="input-medication"></textarea>
+  
+    <H2>Descrição</H2>
+    <textarea type="text" style="height: 200px; width: 100%; border: 1px solid;" id="input-description"></textarea>
+  
+    <button id="sendAttPront">Atualizar Prontuario</button>
+  </div>
+
+
+  <h1 class="heading"> <span>Tabela de Dados</span> </h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Consulta ID</th>
+        <th>Nome do Paciente</th>
+        <th>CPF</th>
+        <th>Data da Consulta</th>
+        <th>Horario da Consulta</th>
+        <th>Prontuario</th>
+        <!-- <th>Ações</th> -->
+      </tr>
+    </thead>
+    <tbody id="corpo-tabela-dados">
+      <!-- Os dados serão inseridos aqui pelo JavaScript -->
+      <!-- <td><button class="fas fa-book-medical btn-prontuario" onclick="abrirProntuario(1)"></button></td> -->
+    </tbody>
+  </table>
+
+
 </section>
 <!-- Fim da seção da tabela de dados -->
 
-Seção do prontuário
-<div id="prontuarioModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="fecharProntuario()">&times;</span>
-        <h2>Prontuário</h2>
-        <div id="prontuarioContent">
-            <!-- Conteúdo do prontuário será adicionado aqui -->
-        </div>
-    </div>
-</div>
-<!-- Fim da seção do prontuário -->
+
 <script>
 
-    const dataUser = JSON.parse(sessionStorage.getItem('userData'))
-    const token = dataUser.token
+  const dataUser = JSON.parse(sessionStorage.getItem('userData'))
+  const token = dataUser.token
 
-    const funcionarioId = dataUser.moreInfos.pessId
+  const pessoaId = dataUser.moreInfos.pessId
 
-    console.log("requisitando consultas medico"," id do funcionario: ", funcionarioId,)
-    fetch('/ConsultasMedico', {
+  console.log("requisitando consultas medico", " id do funcionario: ")
+  fetch('/ConsultasMedico', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
       authorization: token,
-      idpessoa:funcionarioId
+      idpessoa: pessoaId
     }
   })
     .then(response => response.json())
     .then(data => {
-      console.log("resultado: ", data )
 
       if (data.result === false) {
         alert("não foi possivel retornar as especializações disponiveis para registro erro:", data.cadastroMessage)
@@ -74,9 +86,19 @@ Seção do prontuário
         colunaDataConsulta.innerText = `${e.dataConsulta}`
         const colunaHoraConsulta = document.createElement('td')
         colunaHoraConsulta.innerText = `${e.horaConsulta}`
-  
+        const colunaProntuario = document.createElement('td')
 
-        linha.append(colunaId, colunaPacienteNome, colunaCpf,colunaDataConsulta ,colunaHoraConsulta)
+
+        const createProntRegister = document.createElement("i")
+        createProntRegister.classList = "fas fa-folder"
+
+
+        createProntRegister.addEventListener("click", () => {
+          abrirProntuario(e)
+        })
+
+        colunaProntuario.append(createProntRegister)
+        linha.append(colunaId, colunaPacienteNome, colunaCpf, colunaDataConsulta, colunaHoraConsulta, colunaProntuario)
         tableReceiver.appendChild(linha)
 
       })
@@ -88,20 +110,84 @@ Seção do prontuário
     });
 
 
+  function abrirProntuario(consultaAndPront) {
+
+
+    // falta criar lógica para carregar os dados do prontuário com base no ID da consulta
+    const prontuarioContent = document.getElementById("prontuarioContent");
+    prontuarioContent.innerHTML = "<p style='font-size:15px'>Conteúdo do prontuário para a consulta ID: " + consultaAndPront.idConsulta + "</p>";
+
+    if (consultaAndPront.dadosProntuario.diagnostico !== "") {
+      console.log("true")
+      document.getElementById('input-description').value = `${consultaAndPront.dadosProntuario.diagnostico}`
+    }
+    else {
+      console.log("false")
+    }
+
+
+    if(consultaAndPront.dadosProntuario.medicacao !== "") {
+      document.getElementById('input-medication').value = `${consultaAndPront.dadosProntuario.medicacao}`
+    }
+
+
+    document.getElementById("sendAttPront").addEventListener("click", () => {
+    enviaAtualizacaoProntuario(consultaAndPront.dadosProntuario.idPront)
+  })
+
+    // Exibe o modal do prontuário
+    const prontuarioModal = document.getElementById("prontuarioModal");
+    prontuarioModal.style.display = "flex";
+    prontuarioModal.style.flexDirection = "column"
+
+
+
+  }
+
+  function fecharProntuario() {
+    // Oculta o modal do prontuário
+    var prontuarioModal = document.getElementById("prontuarioModal");
+    prontuarioModal.style.display = "none";
+  }
+
+
+  function enviaAtualizacaoProntuario (idProntuario) {
+    fetch('/Prontuario', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: token
+      },
+      body: JSON.stringify({
+        idPront: idProntuario,
+        diagnostico: document.getElementById('input-description').value,
+        medicacao: document.getElementById('input-medication').value
+      })
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.result === false) {
+          alert("Dados do Prontuario atualizado com sucesso.")
+          return
+        } else if (data.auth === false) {
+          alert('usuario deslogado, logue novamente para continuar')
+          window.location = '/login'
+        }
+      })
+      .catch(error => {
+        // Lidar com o erro
+        console.error('Erro:', error);
+      });
+  }
+
+
+
+ 
+
 </script>
 
 <!-- Inicio da função de enviar informações do formulario -->
-<!-- 
-function abrirProntuario(consultaId) {
-  // falta criar lógica para carregar os dados do prontuário com base no ID da consulta
-  var prontuarioContent = document.getElementById("prontuarioContent");
-  prontuarioContent.innerHTML = "<p>Conteúdo do prontuário para a consulta ID " + consultaId + "</p>";
-
-  // Exibe o modal do prontuário
-  var prontuarioModal = document.getElementById("prontuarioModal");
-  prontuarioModal.style.display = "block";
-}
-
+<!--
 // Função para fechar o prontuário
 function fecharProntuario() {
   // Oculta o modal do prontuário
@@ -112,9 +198,9 @@ function fecharProntuario() {
 
 
 <!-- Seção do rodapé -->
-<section class="footer">
-    <div class="credit">Criado por <span>Breaking Medical Clinic.</span> | 2024 Todos os direitos reservados</div>
-</section>
+<!-- <section class="footer">
+  <div class="credit">Criado por <span>Breaking Medical Clinic.</span> | 2024 Todos os direitos reservados</div>
+</section> -->
 <!-- Fim da seção do rodapé -->
 
 <!-- Link para o arquivo de JavaScript personalizado -->

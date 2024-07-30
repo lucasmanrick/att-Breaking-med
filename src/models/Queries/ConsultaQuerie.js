@@ -171,9 +171,9 @@ const QuerieConsulta = {
       if(prontObj.diagnostico !== '' && prontObj.medicacao !== '') {
         returnUpdateStatment = await conn.query('UPDATE tbl_prontuario set diagnostico=? AND medicacao=? WHERE id=?',[prontObj.diagnostico,prontObj.medicacao,prontObj.id])
       }else if (prontObj.diagnostico !== '' && prontObj.medicacao == '') {
-        returnUpdateStatment = await conn.query('UPDATE tbl_prontuario SET diagnostico=? WHERE ID=?',[prontObj.diagnostico, prontObj.id])
+        returnUpdateStatment = await conn.query('UPDATE tbl_prontuario SET diagnostico=? WHERE id=?',[prontObj.diagnostico, prontObj.id])
       }else if (prontObj.diagnostico === '' && prontObj.medicacao !== '') {
-        returnUpdateStatment = await conn.query('UPDATE tbl_prontuario SET medicacao=? WHERE ID=?',[prontObj.medicacao, prontObj.id])
+        returnUpdateStatment = await conn.query('UPDATE tbl_prontuario SET medicacao=? WHERE id=?',[prontObj.medicacao, prontObj.id])
       }
       if(returnUpdateStatment) {
         return {prontuarioMessage:'dados alterados com sucesso', result:true}

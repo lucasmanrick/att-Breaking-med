@@ -10,7 +10,7 @@
 
   </nav>
 
-  <div class="icons">
+  <div class="icons" id="iconLogger">
     <div class="fas fa-sign-out-alt" id="search-btn"></div>
   </div>
 
@@ -19,6 +19,15 @@
 </header>
 
 <script>
+
+  document.getElementById("iconLogger").addEventListener("click",() => {
+    console.log("clicou")
+    sessionStorage.clear()
+
+    window.location="/"
+  } )
+
+
 
   if (sessionStorage.getItem('userData') !== null) {
   
