@@ -108,6 +108,10 @@ const pessoaControllers = {
         return{funcionarioReturn:'falha ao retornar dados do medico', result:false}
       }
 
+  },
+
+  retornaTodosPacientes: async (req,res) => {
+    req.header
   }
   
 

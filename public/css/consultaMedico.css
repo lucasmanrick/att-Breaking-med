@@ -101,18 +101,34 @@ section {
   display: none;
   justify-content: space-between;
   align-items: center;
+  z-index: 5;
 }
 
 .modal-content {
-  width: 100%;
+  width: 90%;
   height: 70px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 10px;
-  border: 1px solid;
   background-color: #D3D3D3;
 }
+
+.close {
+  font-size: 30px;
+  font-weight: bold;
+  cursor: pointer;
+  color: red;
+}
+
+.close:hover{
+  transform: scale(1.1);
+}
+
+#corpo-tabela-dados th, #corpo-tabela-dados td {
+  text-align: center;
+}
+
 
 .prontuarioContent {
   display: flex;
@@ -134,6 +150,16 @@ section {
   color: white;
   margin: 2px;
   padding: 15px;
+}
+
+.fa-folder {
+  transform: scale(3.0);
+  z-index: 0;
+}
+
+.fa-folder:hover {
+  cursor: pointer;
+  
 }
 
 .review .box-container {

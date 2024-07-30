@@ -23,6 +23,7 @@ function verifyJWT(req, res, next){
 
 function verifyJWTMedico(req, res, next){
   const token = req.headers['authorization'];
+  console.log(token, "token recebido no header")
   if (!token) return res.status(401).json({ auth: false, message: 'No token provided.' });
   
   jwt.verify(token, process.env.MEDIC, function(err, decoded) {
@@ -67,12 +68,18 @@ router.get('/CancelaConsultaPage', redirecionamentoControllers.direcionamentoCan
 router.get('/Consulta',verifyJWT, consultaController.retornaTodasConsultas) //abre pagina e retorna todas as consultas ativas para posteriormente conseguirmos desfazer o agendamento.
 router.put('/Consulta',verifyJWT,consultaController.cancelaConsulta)//para cancelar um agendamento.
 
+//rotas para edição de dados de paciente-ADM
 
-//updateDeProntuario 
+// router.get('/EditaInformaçõesPaciente', redirecionamentoControllers.direcionaEdicaoPacientes) // redirecionamento para pagina de edição de pacientes
+router.get('/RetornaTodosPacientes',verifyJWT, pessoaControllers.retornaTodosPacientes) // retorna todos pacientes cadastrados
+
+
+
+//updateDeProntuario-Medico
 router.put('/Prontuario', verifyJWTMedico, consultaController.preencheProntuario) //atualiza dados no prontuario
 
 
-// pagina de visualização de consulta de medico
+// pagina de visualização de consulta de medico - Medico
 router.get('/ConsultaMedicoPage', redirecionamentoControllers.direcionamentoConsultasMedicas)
 router.get('/ConsultasMedico',verifyJWTMedico,consultaController.verificaConsultasMedico)
 
