@@ -65,6 +65,7 @@ const consultaController = {
 
   verificaConsultasMedico: async (req, res) => {
     const idPessoa = req.headers['idpessoa']
+    console.log(idPessoa, "id recebido no header")
     if (idPessoa) {
       const recebeConsultas = new Pessoa(idPessoa)
       res.json(await retornaConsultaDeMedicoLogado(recebeConsultas))

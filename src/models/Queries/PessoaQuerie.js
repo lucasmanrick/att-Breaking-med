@@ -186,6 +186,19 @@ const QuerysPessoa = {
     catch(e) {
       console.log(e)
     }
+
+    
+  },
+
+  retornaTodosPacientes: async () => {
+    const conn = await connection();
+
+    try {
+      const TodosDadosPacientes = conn.query ()
+    }
+    catch(e) {
+      return e
+    }
   }
 
 

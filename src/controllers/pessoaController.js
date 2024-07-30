@@ -2,7 +2,7 @@ const Pessoa = require('../models/Classes/PessoaClass');
 const Endereco = require('../models/Classes/enderecoClass')
 const Perfis = require ('../models/Classes/perfisClass')
 const Consulta = require ('../models/Classes/consultaClass')
-const {novoRegistroPessoa,retornaEspecialidade,logandoCliente,retornaFuncionarioComDeDeterminadaEspecialidade} = require('../models/Queries/PessoaQuerie'); 
+const {novoRegistroPessoa,retornaEspecialidade,logandoCliente,retornaFuncionarioComDeDeterminadaEspecialidade,retornaTodosPacientes} = require('../models/Queries/PessoaQuerie'); 
 const Login = require('../models/Classes/loginClass');
 const Telefone = require('../models/Classes/telefoneClass');
 const Funcionario = require('../models/Classes/funcionarioClass');
@@ -111,7 +111,8 @@ const pessoaControllers = {
   },
 
   retornaTodosPacientes: async (req,res) => {
-    req.header
+     console.log("retornando todos pacientes")
+     
   }
   
 
