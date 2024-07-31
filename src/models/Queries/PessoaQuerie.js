@@ -194,7 +194,10 @@ const QuerysPessoa = {
     const conn = await connection();
 
     try {
-      const TodosDadosPacientes = conn.query ()
+    
+      const TodosDadosPacientes = conn.query ('SELECT endereco.*, pess.*, pessHasTel.*,especialidade.*, funcionario.*, funcionarioHasEsp.* ,login.*, perfis.*, telef.* FROM tbl_pessoa AS pess JOIN tbl_endereco AS endereco ON pess.endereco_id = endereco.id JOIN tbl_pessoa_has_tbl_telefone AS pessHasTel ON pessHasTel.pessoa_id = pess.id JOIN tbl_telefone AS telef ON telef.id = pessHasTel.telefone_id JOIN tbl_login as login on login.pessoa_id = pess.id JOIN tbl_perfis as perfis on perfis.login_pessoa_id = pess.id JOIN tbl_funcionario as funcionario on funcionario.pessoa_id=pess.id JOIN tbl_funcionario_has_tbl_especialidade as funcionarioHasEsp on funcionarioHasEsp.funcionario_pessoa_id = pess.id JOIN tbl_especialidade as especialidade on especialidade.id=funcionarioHasEsp.especialidade_id; ')
+      console.log(TodosDadosPacientes)
+      return TodosDadosPacientes
     }
     catch(e) {
       return e
