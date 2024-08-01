@@ -195,11 +195,56 @@ const QuerysPessoa = {
 
     try {
     
-      const TodosDadosPacientes = conn.query ('SELECT endereco.*, pess.*, pessHasTel.*,especialidade.*, funcionario.*, funcionarioHasEsp.* ,login.*, perfis.*, telef.* FROM tbl_pessoa AS pess JOIN tbl_endereco AS endereco ON pess.endereco_id = endereco.id JOIN tbl_pessoa_has_tbl_telefone AS pessHasTel ON pessHasTel.pessoa_id = pess.id JOIN tbl_telefone AS telef ON telef.id = pessHasTel.telefone_id JOIN tbl_login as login on login.pessoa_id = pess.id JOIN tbl_perfis as perfis on perfis.login_pessoa_id = pess.id JOIN tbl_funcionario as funcionario on funcionario.pessoa_id=pess.id JOIN tbl_funcionario_has_tbl_especialidade as funcionarioHasEsp on funcionarioHasEsp.funcionario_pessoa_id = pess.id JOIN tbl_especialidade as especialidade on especialidade.id=funcionarioHasEsp.especialidade_id; ')
+      const TodosDadosPacientes = await conn.query ('SELECT endereco.logradouro,endereco.bairro,endereco.estado,endereco.numero as num, endereco.complemento,endereco.cep , pess.id as idPess, pess.cpf,pess.nome, pess.data_nasc, pess.genero,pess.email,pess.data_cad, pessHasTel.*,especialidade.*, funcionario.*, funcionarioHasEsp.* ,login.*, perfis.*, telef.* FROM tbl_pessoa AS pess JOIN tbl_endereco AS endereco ON pess.endereco_id = endereco.id JOIN tbl_pessoa_has_tbl_telefone AS pessHasTel ON pessHasTel.pessoa_id = pess.id JOIN tbl_telefone AS telef ON telef.id = pessHasTel.telefone_id JOIN tbl_login as login on login.pessoa_id = pess.id JOIN tbl_perfis as perfis on perfis.login_pessoa_id = pess.id JOIN tbl_funcionario as funcionario on funcionario.pessoa_id=pess.id JOIN tbl_funcionario_has_tbl_especialidade as funcionarioHasEsp on funcionarioHasEsp.funcionario_pessoa_id = pess.id JOIN tbl_especialidade as especialidade on especialidade.id=funcionarioHasEsp.especialidade_id ')
       console.log(TodosDadosPacientes)
+      TodosDadosPacientes[0].forEach( async(e) => {
+        const celphones = await conn.query ('select tel.* from tbl_telefone as tel join tbl_pessoa_has_tbl_telefone as pht on pht.telefone_id=tel.id WHERE pht.pessoa_id = ? ',[e.idPess])
+        
+      })
+
       return TodosDadosPacientes
     }
     catch(e) {
+      return e
+    }
+  },
+
+  editaDadosPacientes: async (dadosToEdit) => {
+    const conn = await connection();
+    let returnMessage;
+    try {
+        await conn.beginTransaction();
+      const updateEditPersonQuery = await conn.query('Update tbl_pessoa set nome=?, cpf=?,data_nasc=?,genero=?,email=?WHERE id=? ',[dadosToEdit.nome,dadosToEdit.cpf,dadosToEdit.data_nasc,dadosToEdit.genero,dadosToEdit.email,dadosToEdit.idPess])
+      const selectPessoaAddressId = await conn.query('Select endereco_id from tbl_pessoa where id=?',[dadosToEdit.idPess])
+      const updateEditAddressQuery = await conn.query('Update tbl_endereco set logradouro=?,bairro=?,estado=?,numero=?,complemento=?,cep=? WHERE id=?',[dadosToEdit.logradouro,dadosToEdit.bairro,dadosToEdit.estado,dadosToEdit.numero,dadosToEdit.complemento,dadosToEdit.cep,selectPessoaAddressId[0][0].endereco_id])
+      dadosToEdit.numero.forEach (async e => {
+       
+
+        const selectTelBridge = await conn.query('Select * from tbl_telefone where numero=?',[e])
+        if(selectTelBridge[0].length > 0) { // se o telefone ja existir ele verifica se o vinculo com o usuario ja existe
+          const bondVerify = await conn.query('Select * from tbl_pessoa_has_tbl_telefone where pessoa_id=? AND telefone_id=?',[dadosToEdit.idPess,selectTelBridge[0][0].id])
+          if(bondVerify[0].length === 0) {
+            const bondInsert = await conn.query('Insert into tbl_pessoa_has_tbl_telefone (pessoa_id,telefone_id,pessoa_tbl_endereco_id) VALUES(?,?,?)',[dadosToEdit.idPess,selectTelBridge[0][0].id,selectPessoaAddressId[0][0].endereco_id])
+            returnMessage = {message:"o usuário foi vinculado ao telefone informado!", result:true}
+            console.log(returnMessage)
+          }else {
+            console.log(returnMessage)
+            returnMessage = {message:"este telefone ja esta cadastrado para este usuário!", result:false}
+          }
+        }else { //se o telefone não existir ainda cria o mesmo
+          const telInsert = await conn.query('Insert into tbl_telefone (numero) VALUES(?)',[dadosToEdit.numero])
+          const bondTelCreated = await conn.query ('Insert into tbl_pessoa_has_tbl_telefone (pessoa_id,telefone_id,pessoa_tbl_endereco_id) VALUES(?,?,?)',[dadosToEdit.idPess,telInsert[0].insertId,selectPessoaAddressId[0][0].endereco_id])
+          returnMessage = {message:"o usuário foi vinculado ao telefone informado!", result:true}
+        }
+        await conn.commit();
+        console.log(returnMessage)
+        return returnMessage
+      })
+
+      
+    }
+    catch(e) {
+      await conn.rollback()
       return e
     }
   }
