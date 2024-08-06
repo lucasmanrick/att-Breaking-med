@@ -1,8 +1,8 @@
 <link rel="stylesheet" href="css/consultaAdm.css">
 <!-- Seção da tabela de dados -->
 <section class="dados" id="dados">
-  <h1 class="heading"> <span>Tabela de todas as Consultas</span> </h1>
-  <table>
+  <h1 class="heading"><span>Tabela de todas as Consultas</span></h1>
+  <table class="container">
     <thead>
       <tr>
         <th>Consulta ID</th>
@@ -16,29 +16,13 @@
     </thead>
     <tbody id="corpo-tabela-dados">
       <!-- Os dados serão inseridos aqui pelo JavaScript -->
-      <!-- <tr>
-        <td>001</td>
-        <td>123.456.789-10</td>
-        <td>João da Silva</td>
-        <td>Dermatologista</td>
-        <td><button class="fas fa-trash-alt btn-excluir" onclick="excluirConsulta(1)"></button></td>
-      </tr>
-      <tr>
-        <td>002</td>
-        <td>583.421.368-10</td>
-        <td>Marcos Lucas</td>
-        <td>Cardiologista</td>
-        <td><button class="fas fa-trash-alt btn-excluir" onclick="excluirConsulta(1)"></button></td>
-      </tr> -->
     </tbody>
   </table>
 </section>
 <!-- Fim da seção da tabela de dados -->
 
 <script defer>
-
   function cancelaConsulta(idConsulta) {
-
     fetch('/Consulta', {
       method: 'PUT',
       headers: {
@@ -50,24 +34,22 @@
       .then(response => response.json())
       .then(data => {
         if (data.result === false) {
-          alert("não foi possivel obter ou não possuem consultas pendentes mensagem: ", data.cadastroMessage)
-          return
+          alert("não foi possivel obter ou não possuem consultas pendentes mensagem: ", data.cadastroMessage);
+          return;
         } else if (data.auth === false) {
-          alert('usuario deslogado, logue novamente para continuar')
-          window.location = '/login'
+          alert('usuario deslogado, logue novamente para continuar');
+          window.location = '/login';
         }
-        alert(data.consultaMessage)
-
-        window.location="/CancelaConsultaPage"
+        alert(data.consultaMessage);
+        window.location = "/CancelaConsultaPage";
       })
       .catch(error => {
-        // Lidar com o erro
         console.error('Erro:', error);
       });
   }
 
-  const dataUser = JSON.parse(sessionStorage.getItem('userData'))
-  const token = dataUser.token
+  const dataUser = JSON.parse(sessionStorage.getItem('userData'));
+  const token = dataUser.token;
 
   fetch('/Consulta', {
     method: 'GET',
@@ -79,52 +61,53 @@
     .then(response => response.json())
     .then(data => {
       if (data.result === false) {
-        alert("não foi possivel retornar as especializações disponiveis para registro erro:", data.cadastroMessage)
-        return
+        alert("não foi possivel retornar as especializações disponiveis para registro erro:", data.cadastroMessage);
+        return;
       } else if (data.auth === false) {
-        alert('usuario deslogado, logue novamente para continuar')
-        window.location = '/login'
+        alert('usuario deslogado, logue novamente para continuar');
+        window.location = '/login';
       }
 
-      const tableReceiver = document.getElementById('corpo-tabela-dados')
+      const tableReceiver = document.getElementById('corpo-tabela-dados');
 
       data.moreInfos.forEach(e => {
-        const linha = document.createElement('tr')
-        const colunaId = document.createElement('td')
-        colunaId.innerText = `${e.id}`
-        const colunaData = document.createElement('td')
-        colunaData.innerText = `${e.data}`
-        const colunaHora = document.createElement('td')
-        colunaHora.innerText = `${e.hora}`
-        const colunaPacienteNome = document.createElement('td')
-        colunaPacienteNome.innerText = `${e.paciente_nome}`
-        const colunaFuncionarioNome = document.createElement('td')
-        colunaFuncionarioNome.innerText = `${e.funcionario_nome}`
-        const colunaEspecialidade = document.createElement('td')
-        colunaEspecialidade.innerText = `${e.desc_especialidade}`
-        const colunaButtonContent = document.createElement('td')
-        const buttonConsultaCancel = document.createElement('button')
-        buttonConsultaCancel.innerText = 'Cancelar Consulta'
-        buttonConsultaCancel.style.cursor = 'pointer'
-        buttonConsultaCancel.style.padding = '15px'
-        buttonConsultaCancel.addEventListener('click', (ev) => {
-          const confirmMessage = confirm('Você tem certeza que deseja cancelar a consulta do paciente' + " " + e.paciente_nome + "?")
-          if (confirmMessage === true) {
-            cancelaConsulta(e.id)
+        const linha = document.createElement('tr');
+        const colunaId = document.createElement('td');
+        colunaId.innerText = `${e.id}`;
+        const colunaData = document.createElement('td');
+        colunaData.innerText = `${e.data}`;
+        const colunaHora = document.createElement('td');
+        colunaHora.innerText = `${e.hora}`;
+        const colunaPacienteNome = document.createElement('td');
+        colunaPacienteNome.innerText = `${e.paciente_nome}`;
+        const colunaFuncionarioNome = document.createElement('td');
+        colunaFuncionarioNome.innerText = `${e.funcionario_nome}`;
+        const colunaEspecialidade = document.createElement('td');
+        colunaEspecialidade.innerText = `${e.desc_especialidade}`;
+        const colunaButtonContent = document.createElement('td');
+        const buttonConsultaCancel = document.createElement('button');
+        buttonConsultaCancel.innerText = 'Cancelar Consulta';
+        buttonConsultaCancel.style.cursor = 'pointer';
+        buttonConsultaCancel.style.padding = '15px';
+        buttonConsultaCancel.addEventListener('click', () => {
+          const confirmMessage = confirm('Você tem certeza que deseja cancelar a consulta do paciente ' + e.paciente_nome + "?");
+          if (confirmMessage) {
+            cancelaConsulta(e.id);
           }
-        })
+        });
 
-        colunaButtonContent.append(buttonConsultaCancel)
-        linha.append(colunaId, colunaData, colunaHora, colunaPacienteNome, colunaFuncionarioNome, colunaEspecialidade, colunaButtonContent)
-        tableReceiver.appendChild(linha)
-      })
+        colunaButtonContent.append(buttonConsultaCancel);
+        linha.append(colunaId, colunaData, colunaHora, colunaPacienteNome, colunaFuncionarioNome, colunaEspecialidade, colunaButtonContent);
+        tableReceiver.appendChild(linha);
+      });
 
     })
     .catch(error => {
       console.error('Erro:', error);
     });
-
-
-
-
 </script>
+
+
+
+
+ 

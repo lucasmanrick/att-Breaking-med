@@ -1,33 +1,56 @@
 <link rel="stylesheet" href="/css/telaLogin.css">
 
-<div class="container">
-  <form id="sendForm" class="forms-container" method="post" action="">
+<body>
 
-    <h3>Seja Bem-vindo!</h3>
 
-    <div class="containers-inputs">
-      <div class="input-container">
-        <input name="login" placeholder="CPF" type="text" required id="login">
-        <i class="fas fa-user"></i>
+  <section class="login-section">
+    <div class="container">
+      <div class="image-container">
+        <img src="/img/imgLogo1.jpg" alt="Imagem de Login">
       </div>
+      <form id="sendForm" class="forms-container" method="post" action="">
+        <h3>Seja Bem-vindo!</h3>
+        <div class="containers-inputs">
+          <div class="input-container">
+            <input name="login" placeholder="CPF" type="text" required id="login">
+            <i class="fas fa-user"></i>
+          </div>
+          <div class="senha-container">
+            <input name="senha" placeholder="Senha" type="password" required id="senha">
+            <i class="fas fa-key"></i>
+          </div>
+          <a href="#" id="esqueciminhasenha">Esqueci minha senha</a>
+        </div>
+        <input id="submitButton" type="submit" class="submit-button" title="Enviar"></input>
 
-      <div class="senha-container">
-        <input name="senha" placeholder="Senha" type="password" required id="senha">
-        <i class="fas fa-key"></i>
-      </div>
+        <div class="redirect-buttons">
+          <button class="buttonF">
+            <svg viewBox="0 0 16 16" class="bi bi-facebook" fill="currentColor" height="16" width="16"
+              xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z">
+              </path>
+            </svg>
+            <span>conect with Facebook</span>
+          </button>
 
-      <a href="#" id="esqueciminhasenha">Esqueci minha senha</a>
+          <button class="button1">
+            <svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid" viewBox="0 0 256 262" class="svg">
+            <path fill="#4285F4" d="M255.878 133.451c0-10.734-.871-18.567-2.756-26.69H130.55v48.448h71.947c-1.45 12.04-9.283 30.172-26.69 42.356l-.244 1.622 38.755 30.023 2.685.268c24.659-22.774 38.875-56.282 38.875-96.027" class="blue"></path>
+            <path fill="#34A853" d="M130.55 261.1c35.248 0 64.839-11.605 86.453-31.622l-41.196-31.913c-11.024 7.688-25.82 13.055-45.257 13.055-34.523 0-63.824-22.773-74.269-54.25l-1.531.13-40.298 31.187-.527 1.465C35.393 231.798 79.49 261.1 130.55 261.1" class="green"></path>
+            <path fill="#FBBC05" d="M56.281 156.37c-2.756-8.123-4.351-16.827-4.351-25.82 0-8.994 1.595-17.697 4.206-25.82l-.073-1.73L15.26 71.312l-1.335.635C5.077 89.644 0 109.517 0 130.55s5.077 40.905 13.925 58.602l42.356-32.782" class="yellow"></path>
+            <path fill="#EB4335" d="M130.55 50.479c24.514 0 41.05 10.589 50.479 19.438l36.844-35.974C195.245 12.91 165.798 0 130.55 0 79.49 0 35.393 29.301 13.925 71.947l42.211 32.783c10.59-31.477 39.891-54.251 74.414-54.251" class="red"></path>
+          </svg>
+          <span class="textL">conect with Google</span>
+          </button>
+
+        </div>
+      </form>
     </div>
+  </section>
+</body>
 
 
-    <input id="submitButton" type="submit" class="submit-button" title="Enviar"></input>
-
-    <div class="register-link">
-      <p>Não possui cadastro? Solicite entrando em contato com (19)99999-9999</p>
-    </div>
-
-  </form>
-</div>
 
 
 <script defer>
@@ -54,21 +77,34 @@
     })
       .then(response => response.json())
       .then(data => {
-        if(sessionStorage.getItem("userData")) {
-          sessionStorage.setItem('userData','')
+        if (sessionStorage.getItem("userData")) {
+          sessionStorage.setItem('userData', '')
         }
         if (data.result === false) {
           alert(data.loginMessage)
           return
         }
-        sessionStorage.setItem("userData",JSON.stringify(data));
+        sessionStorage.setItem("userData", JSON.stringify(data));
         console.log('data user', sessionStorage.getItem('userData'))
         window.location = data.redirect;
       })
-    .catch (error => {
-      // Lidar com o erro
-      console.error('Erro:', error);
+      .catch(error => {
+        // Lidar com o erro
+        console.error('Erro:', error);
+      });
+  })
+
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const elements = document.querySelectorAll('.input-container, .senha-container, .submit-button, .redirect-buttons a');
+
+    elements.forEach((element, index) => {
+      setTimeout(() => {
+        element.style.opacity = 1;
+        element.style.transform = 'translateY(0)';
+      }, index * 300);
     });
-})
+  });
+
 
 </script>

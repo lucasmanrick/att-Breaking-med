@@ -57,13 +57,14 @@ const QuerieConsulta = {
       if (verificaConsultasAtivas[0].length >= 5) {
         return { consultaMessage: 'não foi possivel marcar a consulta, pois o usuário tem muitas consultas pendentes', result: false }
       }
+    
 
       const cRes = await conn.query('insert into tbl_consulta (data,hora,status,paciente_id,paciente_pessoa_id,funcionario_id,funcionario_pessoa_id,especialidade_id) VALUES (?,?,?,?,?,?,?,?)', [consultaObj.dataConsulta, consultaObj.horaConsulta, consultaObj.statusConsulta, consultaObj.pacienteId, consultaObj.pacientePessoaId, consultaObj.funcionarioId, consultaObj.funcionarioPessoaId, consultaObj.especialidadeId])
 
       if (cRes[0].affectedRows === 1) {
         const pacientName = await conn.query('select nome from tbl_pessoa where id=?', [consultaObj.pacientePessoaId])
         const doctorName = await conn.query('select nome from tbl_pessoa where id=?', [consultaObj.funcionarioPessoaId])
-        const createPront = await conn.query ('insert into tbl_prontuario (diagnostico,medicacao,especialidade_id,consulta_id,consulta_paciente_id,consulta_paciente_pessoa_id,consulta_funcionario_id,consulta_funcionario_pessoa_id) VALUES (?,?,?,?,?,?,?,?)', ['','',consultaObj.especialidadeId,cRes[0].insertId,consultaObj.pacienteId,consultaObj.pacientePessoaId,consultaObj.funcionarioId,consultaObj.funcionarioPessoaId])
+        const createPront = await conn.query ('insert into tbl_prontuario (diagnostico,medicacao,consulta_especialidade_id,consulta_id,consulta_paciente_id,consulta_paciente_pessoa_id,consulta_funcionario_id,consulta_funcionario_pessoa_id) VALUES (?,?,?,?,?,?,?,?)', ['','',consultaObj.especialidadeId,cRes[0].insertId,consultaObj.pacienteId,consultaObj.pacientePessoaId,consultaObj.funcionarioId,consultaObj.funcionarioPessoaId])
         await conn.commit();
         return { consultaMessage: 'consulta registrada com sucesso', result: true, moreInfos: { data: consultaObj.dataConsulta, hora: consultaObj.horaConsulta, pacientName: pacientName[0][0].nome, doctorName: doctorName[0][0].nome } }
       }
@@ -168,13 +169,7 @@ const QuerieConsulta = {
     const conn = await connection();
     try{
       let returnUpdateStatment;
-      if(prontObj.diagnostico !== '' && prontObj.medicacao !== '') {
-        returnUpdateStatment = await conn.query('UPDATE tbl_prontuario set diagnostico=? , medicacao=? WHERE id=?',[prontObj.diagnostico,prontObj.medicacao,prontObj.id])
-      }else if (prontObj.diagnostico !== '' && prontObj.medicacao == '') {
-        returnUpdateStatment = await conn.query('UPDATE tbl_prontuario SET diagnostico=? WHERE id=?',[prontObj.diagnostico, prontObj.id])
-      }else if (prontObj.diagnostico === '' && prontObj.medicacao !== '') {
-        returnUpdateStatment = await conn.query('UPDATE tbl_prontuario SET medicacao=? WHERE id=?',[prontObj.medicacao, prontObj.id])
-      }
+      returnUpdateStatment = await conn.query('UPDATE tbl_prontuario set diagnostico=? , medicacao=? WHERE id=?',[prontObj.diagnostico,prontObj.medicacao,prontObj.id])
       if(returnUpdateStatment) {
         return {prontuarioMessage:'dados alterados com sucesso', result:true}
       }else {

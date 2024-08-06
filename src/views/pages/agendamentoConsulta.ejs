@@ -1,50 +1,48 @@
 <link rel="stylesheet" href="css/agendamentoConsulta.css">
 
-<div class="container">
-  <div class="div-titles">
-    <h3>Agendamento de Consulta</h3>
-  </div>
-  <h5 id="Nomeh5">Nome do Médico:</h5>
-  <h5 id="Especialidadeh5">Especialidade do Médico:</h5>
-  <h5 id="Horarioh5">Horário da consulta:</h5>
-  <h5 id="Datah5">Data da consulta:</h5>
 
-  <div class="formstotal">
 
-    <form class="forms" id="form" action="">
-      <input placeholder="CPF do cliente" type="text" required name="CPF" id="CPF">
-      <select class="form-control" name="Nome" id="Nome">
-      </select>
-      <select class="form-control Especialidade" name="Especialidade" id="Especialidade">
-        <option value="">Selecione uma especialidade</option>
-      </select>
-    </form>
+<section class="agendamentoDeConsulta">
+  <div class="container">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <div class="div-titles">
+      <h3>Agendamento de Consulta</h3>
+    </div>
 
-    <div class="input-container">
+    <div class="formstotal">
+      <form class="forms" id="form" action="">
+        
+        <input placeholder="CPF do cliente" type="text" required name="CPF" id="CPF">
+        <select class="form-control" name="Nome" id="Nome">
+          <option value="">Medicos disponiveis: </option>
+        </select>
+        <select class="form-control Especialidade" name="Especialidade" id="Especialidade">
+          <option value="">Selecione uma especialidade:</option>
+        </select>
+      </form>
 
-      <div id="divHora">
-        <label for="Horinha" id="Horinha">Hora da consulta:</label>
-        <input placeholder="Hora" name="hora" type="text" required id="Hora">
-      </div>
+      <div class="input-container">
+        <div id="divHora">
+          <label for="Horinha" id="Horinha">Hora da consulta:</label>
+          <input placeholder="Hora" name="hora" type="text" required id="Hora">
+        </div>
 
-      <div id="Datinha">
-        <label for="Datinha">Data da consulta:</label>
-        <input type="Date" name="Datinha" lang="text" required id="Data">
+        <div id="Datinha">
+          <label for="Datinha">Data da consulta:</label>
+          <input type="Date" name="Datinha" lang="text" required id="Data">
+        </div>
       </div>
     </div>
 
+    <div class="btn">
+      <button type="button" id="Agendar">Agendar</button>
+      <button type="button" id="Voltar">Voltar</button>
+    </div>
   </div>
-
-
-
-
-  <div class="btn">
-    <button type="button" id="Agendar">Agendar</button>
-    <button type="button" id="Voltar">Voltar</button>
-  </div>
-
-
-</div>
+</section>
 
 <script>
   const dataUser = JSON.parse(sessionStorage.getItem('userData'))
@@ -135,7 +133,6 @@
                 if (secondVerifyNecessity === true) {
                   const createNewOption = document.createElement('option')
                   createNewOption.value = `${dataWorker.funcionario_id}`;
-                  // createNewOption.value = `${dataWorker.funcionario_pessoa_id}`;
                   createNewOption.innerText = `${dataWorker.nome}`
                   selectNames.appendChild(createNewOption)
                 }
@@ -146,8 +143,6 @@
 
       });
 
-
-      // receiveEspecialities.moreInfos.forEach()
     })
     .catch(error => {
       console.error('Erro:', error);
@@ -157,17 +152,11 @@
     e.preventDefault();
   })
 
-
   document.getElementById('Agendar').addEventListener('click', async e => {
     const selectNames = document.getElementById("Nome")
-
     const allOptionsAttVerify = document.getElementsByTagName('Option')
-
-
     const seletor = document.getElementsByClassName('Especialidade')[0]
     const especialidade_id = parseInt(seletor.value)
-
-
     const cpfPaciente = document.getElementById('CPF').value
     const data = document.getElementById('Data').value
     const hora = document.getElementById('Hora').value
@@ -175,10 +164,7 @@
     let armazenaIdPessFuncionarioId = localStorage.getItem('medicInfo')
     armazenaIdPessFuncionarioId = JSON.parse(armazenaIdPessFuncionarioId)
     const funcionario_id = armazenaIdPessFuncionarioId.moreInfos[0].funcionario_id
-
     armazenaIdPessFuncionarioId = armazenaIdPessFuncionarioId.moreInfos[0].funcionario_pessoa_id
-
-
 
     fetch('/NovaConsulta', {
       method: 'POST',
@@ -203,3 +189,4 @@
       })
   })
 </script>
+

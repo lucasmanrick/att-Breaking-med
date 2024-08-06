@@ -5,24 +5,28 @@
 
   <div id="prontuarioModal" class="modal">
     <div class="modal-content">
-      <h2>Prontuário Breaking Med</h2>
+      <h1 class="heading"><span>Prontuário Breaking Med</span></h1>
       <span class="close" onclick="fecharProntuario()">X</span>
     </div>
     <div id="prontuarioContent">
       <!-- Conteúdo do prontuário será adicionado aqui -->
     </div>
-    <H2>Medicação</H2>
-    <textarea type="text" style="height: 100px; width: 100%; border: 1px solid;" id="input-medication"></textarea>
-  
-    <H2>Descrição</H2>
-    <textarea type="text" style="height: 200px; width: 100%; border: 1px solid;" id="input-description"></textarea>
-  
+    <div class="medicacaos">
+      <H2>Medicação</H2>
+      <textarea type="text" style="height: 100px; width: 100%; border: 1px solid;" id="input-medication"></textarea>
+
+      <H2>Descrição</H2>
+      <textarea type="text" style="height: 200px; width: 100%; border: 1px solid;" id="input-description"></textarea>
+    </div>
+    
+
+
     <button id="sendAttPront">Atualizar Prontuario</button>
   </div>
 
 
-  <h1 class="heading"> <span>Tabela de Dados</span> </h1>
-  <table>
+  <h1 class="heading2"> <span>Tabela de Dados</span> </h1>
+  <table class="container">
     <thead>
       <tr>
         <th>Consulta ID</th>
@@ -52,7 +56,6 @@
 
   const pessoaId = dataUser.moreInfos.pessId
 
-  console.log("requisitando consultas medico", " id do funcionario: ")
   fetch('/ConsultasMedico', {
     method: 'GET',
     headers: {
@@ -63,9 +66,9 @@
   })
     .then(response => response.json())
     .then(data => {
-
+      console.log(data.dadosProntuario)
       if (data.result === false) {
-        alert("não foi possivel retornar as especializações disponiveis para registro erro:", data.cadastroMessage)
+        alert("não foi possivel trazer as consultas deste medico, tente novamente:", data.consultaAndPront)
         return
       } else if (data.auth === false) {
         alert('usuario deslogado, logue novamente para continuar')
@@ -74,7 +77,7 @@
 
       const tableReceiver = document.getElementById('corpo-tabela-dados')
 
-      data.moreInfos.forEach(e => {
+      data.moreInfos.forEach(async e => {
         const linha = document.createElement('tr')
         const colunaId = document.createElement('td')
         colunaId.innerText = `${e.idConsulta}`
@@ -91,11 +94,14 @@
 
         const createProntRegister = document.createElement("i")
         createProntRegister.classList = "fas fa-folder"
-        
 
 
-        createProntRegister.addEventListener("click", () => {
-          abrirProntuario(e)
+
+        await createProntRegister.addEventListener("click", async () => {
+          document.getElementById('input-medication').value = ""
+          document.getElementById('input-description').value = ""
+          await abrirProntuario(e)
+
         })
 
         colunaProntuario.append(createProntRegister)
@@ -111,44 +117,70 @@
     });
 
 
-  function abrirProntuario(consultaAndPront) {
+  async function abrirProntuario(consultaAndPront) {
+
+    console.log("abrindo prontuario", consultaAndPront.dadosProntuario)
+
+    try {
+
+      const prontuarioContent = document.getElementById("prontuarioContent");
 
 
-    // falta criar lógica para carregar os dados do prontuário com base no ID da consulta
-    const prontuarioContent = document.getElementById("prontuarioContent");
-    prontuarioContent.innerHTML = "<p style='font-size:15px'>Conteúdo do prontuário para a consulta ID: " + consultaAndPront.idConsulta + "</p>";
-
-    if (consultaAndPront.dadosProntuario.diagnostico !== "") {
-      console.log("true")
-      document.getElementById('input-description').value = `${consultaAndPront.dadosProntuario.diagnostico}`
-    }
-    else {
-      console.log("false")
-    }
+      prontuarioContent.innerHTML = "<p style='font-size:15px'>Conteúdo do prontuário para a consulta ID: " + consultaAndPront.idConsulta + "</p>";
 
 
-    if(consultaAndPront.dadosProntuario.medicacao !== "") {
-      document.getElementById('input-medication').value = `${consultaAndPront.dadosProntuario.medicacao}`
-    }
 
-
-    document.getElementById("sendAttPront").addEventListener("click", async() => {
-      try {
-        await enviaAtualizacaoProntuario(consultaAndPront.dadosProntuario.idPront)
-        fecharProntuario()
-        alert("prontuario atualizado com sucesso!.")
+      if (consultaAndPront.dadosProntuario.diagnostico !== "") {
+        document.getElementById('input-description').value = `${consultaAndPront.dadosProntuario.diagnostico}`
       }
-      catch(e) {
-        console.log(e)
+      else {
+
+        console.log("false")
       }
-    
-  })
+
+
+      if (consultaAndPront.dadosProntuario.medicacao !== "") {
+        document.getElementById('input-medication').value = `${consultaAndPront.dadosProntuario.medicacao}`
+      }
+
+    }
+    catch (e) {
+      console.log(e)
+    }
+
+    // document.getElementById("sendAttPront").removeEventListener("click")
 
     // Exibe o modal do prontuário
     const prontuarioModal = document.getElementById("prontuarioModal");
     prontuarioModal.style.display = "flex";
     prontuarioModal.style.flexDirection = "column"
 
+    const handleClick = async () => {
+      try {
+        await enviaAtualizacaoProntuario(consultaAndPront.dadosProntuario.idPront);
+        fecharProntuario();
+        alert("Prontuário atualizado com sucesso!");
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
+    // Primeiro, remova o EventListener antigo, se existir
+
+    if (document.getElementById('sendAttPront')) {
+      prontuarioModal.removeChild(document.getElementById('sendAttPront'))
+    }
+
+    const button = document.createElement('button')
+    button.id = "sendAttPront"
+    button.textContent = "Atualizar Prontuario"
+    button.removeEventListener("click", handleClick);
+
+    // Adicione o novo EventListener
+    button.addEventListener("click", handleClick);
+
+
+    prontuarioModal.append(button)
 
 
   }
@@ -160,7 +192,10 @@
   }
 
 
-   function  enviaAtualizacaoProntuario (idProntuario) {
+  function enviaAtualizacaoProntuario(idProntuario) {
+    alert("enviando update prontuario " + idProntuario)
+
+
     fetch('/Prontuario', {
       method: 'PUT',
       headers: {
@@ -181,7 +216,7 @@
         } else if (data.auth === false) {
           alert('usuario deslogado, logue novamente para continuar')
           window.location = '/login'
-        }   
+        }
       })
       .catch(error => {
         // Lidar com o erro
@@ -191,7 +226,7 @@
 
 
 
- 
+
 
 </script>
 

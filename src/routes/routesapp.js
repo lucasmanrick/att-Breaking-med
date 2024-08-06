@@ -72,22 +72,22 @@ router.put('/Consulta',verifyJWT,consultaController.cancelaConsulta)//para cance
 //rotas para edição de dados de paciente-ADM
 
 // router.get('/EditaInformaçõesPaciente', redirecionamentoControllers.direcionaEdicaoPacientes) // redirecionamento para pagina de edição de pacientes
-router.get('/RetornaTodosPacientes',verifyJWT, pessoaControllers.retornaTodosPacientes) // retorna todos pacientes cadastrados
-router.put('/EditaDadosPaciente',verifyJWT, pessoaControllers.editaDadosPacientes) // edita dados paciente.
+router.get('/RetornaTodosPacientes',verifyJWT, pessoaControllers.retornaTodosPacientes); // retorna todos pacientes cadastrados
+router.put('/EditaDadosPaciente',verifyJWT, pessoaControllers.editaDadosPacientes); // edita dados paciente.
 
 
 //updateDeProntuario-Medico
-router.put('/Prontuario', verifyJWTMedico, consultaController.preencheProntuario) //atualiza dados no prontuario
+router.put('/Prontuario', verifyJWTMedico, consultaController.preencheProntuario); //atualiza dados no prontuario
 
 
 // pagina de visualização de consulta de medico - Medico
-router.get('/ConsultaMedicoPage', redirecionamentoControllers.direcionamentoConsultasMedicas)
-router.get('/ConsultasMedico',verifyJWTMedico,consultaController.verificaConsultasMedico)
+router.get('/ConsultaMedicoPage', redirecionamentoControllers.direcionamentoConsultasMedicas);
+router.get('/ConsultasMedico',verifyJWTMedico,consultaController.verificaConsultasMedico);
 
 
 //pagina de visualização consulta de paciente
-router.get('/ConsultaPacientePage', redirecionamentoControllers.direcionamentoConsultasPaciente)
-router.get('/ConsultasPaciente',verifyJWTPaciente,consultaController.verificaConsultasPaciente) //retorna todas consultas do paciente logado
+router.get('/ConsultaPacientePage', redirecionamentoControllers.direcionamentoConsultasPaciente);
+router.get('/ConsultasPaciente',verifyJWTPaciente,consultaController.verificaConsultasPaciente); //retorna todas consultas do paciente logado
 
 
 //home

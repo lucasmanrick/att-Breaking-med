@@ -1,67 +1,71 @@
 <link rel="stylesheet" href="/css/cadastroPessoa.css">
-<!-- Formulário de cadastro -->
-<form id="cadastro">
-  <h1 id="cadastroPessoa">CADASTRO DE ACESSO AO SITE</h1>
-  <label for="nome" style="font-size: 15px;">Nome:</label>
-  <input type="text" name="nome" id="nome" placeholder="Nome">
 
-  <label for="cpf" style="font-size: 15px;">CPF:</label>
-  <input type="text" name="cpf" id="cpf" placeholder="Cpf">
+<section class="cadastroContainer">
+  <form id="cadastro">
+    <h1 id="cadastroPessoa">CADASTRO DE ACESSO AO SITE</h1>
 
-  <label for="genero" style="font-size: 15px;">Genero:</label>
-  <select name="genero" id="genero">
-    <option value="masculino">Masculino</option>
-    <option value="feminino">Feminino</option>
-    <option value="outro">Outro</option>
-  </select>
+    <label for="nome">Nome:</label>
+    <input type="text" name="nome" id="nome" placeholder="Nome">
 
-  <label for="dataNasc" style="font-size: 15px;">Data de nascimento:</label>
-  <input type="date" name="dataNasc" id="dataNasc">
+    <label for="cpf">CPF:</label>
+    <input type="text" name="cpf" id="cpf" placeholder="Cpf">
 
-  <label for="email" style="font-size: 15px;">Email:</label>
-  <input type="email" name="email" id="email" placeholder="Email">
+    <label for="genero">Genero:</label>
+    <select name="genero" id="genero">
+      <option value="masculino">Masculino</option>
+      <option value="feminino">Feminino</option>
+      <option value="outro">Outro</option>
+    </select>
 
-  <label for="logradouro" style="font-size: 15px;">Logradouro:</label>
-  <input type="text" name="logradouro" id="logradouro" placeholder="Logradouro">
+    <label for="dataNasc">Data de nascimento:</label>
+    <input type="date" name="dataNasc" id="dataNasc">
 
-  <label for="bairro" style="font-size: 15px;">Bairro:</label>
-  <input type="text" name="bairro" id="bairro" placeholder="Bairro">
+    <label for="email">Email:</label>
+    <input type="email" name="email" id="email" placeholder="Email">
 
-  <label for="bairro" style="font-size: 15px;">Estado:</label>
-  <input type="text" name="estado" id="estado" placeholder="Estado">
+    <label for="logradouro">Logradouro:</label>
+    <input type="text" name="logradouro" id="logradouro" placeholder="Logradouro">
 
-  <label for="numero" style="font-size: 15px;">Numero da casa:</label>
-  <input type="text" name="numero" id="numero" placeholder="Numero">
+    <label for="bairro">Bairro:</label>
+    <input type="text" name="bairro" id="bairro" placeholder="Bairro">
 
-  <label for="complemento" style="font-size: 15px;">Complemento:</label>
-  <input type="text" name="complemento" id="complemento" placeholder="Complemento">
+    <label for="estado">Estado:</label>
+    <input type="text" name="estado" id="estado" placeholder="Estado">
 
-  <label for="cep" style="font-size: 15px;">Cep:</label>
-  <input type="text" name="cep" id="cep" placeholder="Cep">
+    <label for="numero">Numero da casa:</label>
+    <input type="text" name="numero" id="numero" placeholder="Numero">
 
-  <label for="telefones" style="font-size: 15px;">Numero para contato:</label>
-  <input type="number" name="telefones" id="telefones" placeholder="Telefones">
+    <label for="complemento">Complemento:</label>
+    <input type="text" name="complemento" id="complemento" placeholder="Complemento">
 
-  <label for="personPerfil" style="font-size: 15px;">tipo de acesso ao sistema:</label>
-  <select name="personPerfil" id="personPerfil">
-    <option value="medico">Medico</option>
-    <option value="administrador">Administrador</option>
-    <option value="paciente">Paciente</option>
-  </select>
+    <label for="cep">Cep:</label>
+    <input type="text" name="cep" id="cep" placeholder="Cep">
 
-  <label for="dataAdmissao" style="font-size: 15px;">data de admissão do funcionario:</label>
-  <input type="date" name="dataAdmissao" id="dataAdmissao" placeholder="Data Admissao">
+    <label for="telefones">Numero para contato:</label>
+    <input type="number" name="telefones" id="telefones" placeholder="Telefones">
 
-  <label for="crm" style="font-size: 15px;">Número CRM:</label>
-  <input type="number" name="crm" id="crm" placeholder="Crm">
+    <label for="personPerfil">Tipo de acesso ao sistema:</label>
+    <select name="personPerfil" id="personPerfil">
+      <option value="administrador">Administrador</option>
+      <option value="medico">Medico</option>
+      <option value="paciente">Paciente</option>
+    </select>
 
-  <label for="especialidadeParaRegistro" style="font-size: 15px;">Especialidade do funcionario:</label>
-  <select name="especialidadeParaRegistro" id="especialidadeParaRegistro">
+    <div id="medicoFields">
+      <label for="dataAdmissao">Data de admissão do funcionário:</label>
+      <input type="date" name="dataAdmissao" id="dataAdmissao">
 
-  </select>
+      <label for="crm">Número CRM:</label>
+      <input type="number" name="crm" id="crm" placeholder="Crm">
 
-  <button type="submit">Enviar</button>
-</form>
+      <label for="especialidadeParaRegistro">Especialidade do funcionário:</label>
+      <select name="especialidadeParaRegistro" id="especialidadeParaRegistro"></select>
+    </div>
+
+    <button type="submit">Enviar</button>
+  </form>
+</section>
+
 <!-- Fim do formulário de cadastro -->
 
 <script defer>
@@ -183,7 +187,7 @@
         } else if (data.auth === false) {
           alert('usuario deslogado, logue novamente para continuar')
           window.location = '/login'
-          
+
         }
         alert('usuario registrado com sucesso')
       })
@@ -193,6 +197,25 @@
       });
 
   })
+
+  // esconder os campos para seleção medico
+  document.addEventListener('DOMContentLoaded', () => {
+    const perfilSelect = document.getElementById('personPerfil');
+    const medicofield = document.getElementById('medicoFields');
+
+    perfilSelect.addEventListener('change', () => {
+      const value = perfilSelect.value;
+      if (value === 'medico') {
+        medicofield.style.display = 'block';
+      } else {
+        medicofield.style.display = 'none';
+      
+      }
+    });
+
+    // Inicializar visibilidade dos campos com base no valor inicial
+    perfilSelect.dispatchEvent(new Event('change'));
+  });
 
 
 </script>
