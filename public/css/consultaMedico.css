@@ -52,7 +52,7 @@ html::-webkit-scrollbar-thumb {
 .modal {
     padding-top: 4%;
     width: 86%;
-    height: 83%;
+    height: 90%;
     border: 3px solid;
     border-radius: 2rem;
     position: absolute;
@@ -68,7 +68,7 @@ html::-webkit-scrollbar-thumb {
 
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    /* align-items: center; */
     padding: 0 10px;
 
 }
@@ -106,7 +106,8 @@ html::-webkit-scrollbar-thumb {
 }
 
 .medicacaos {
-    padding: 2rem;
+    /* padding: 2rem; */
+    width: 100%;
 }
 
 textarea#input-medication {
@@ -130,7 +131,7 @@ textarea#input-description:hover {
     color: #2a4b62;
     margin: 2px;
     padding: 15px;
-    margin-left: 40rem;
+    /* margin-left: 10rem; */
     margin-top: 3rem;
 }
 
@@ -164,14 +165,14 @@ h1.heading {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     font-weight: bold;
-    margin-left: 48rem;
+    /* margin-left: 48rem; */
 }
 
 .heading2 {
     text-align: center;
     color: #022135;
     text-transform: uppercase;
-    padding-bottom: 3.5rem;
+    /* padding-bottom: 3.5rem; */
     font-size: 4rem;
 
 }
